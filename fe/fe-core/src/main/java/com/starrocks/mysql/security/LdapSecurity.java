@@ -18,6 +18,7 @@ package com.starrocks.mysql.security;
 import com.google.common.base.Strings;
 import com.starrocks.common.Config;
 import com.starrocks.common.util.NetUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -99,7 +100,12 @@ public class LdapSecurity {
             sc.setSearchScope(SearchControls.SUBTREE_SCOPE);
             String searchFilter = "(" + Config.authentication_ldap_simple_user_search_attr + "=" + user + ")";
             NamingEnumeration<SearchResult> results = ctx.search(baseDN, searchFilter, sc);
-
+            if (!results.hasMore() && !StringUtils.isEmpty(Config.authentication_ldap_simple_bind_base_dn_2)) {
+                String baseDN2 = Config.authentication_ldap_simple_bind_base_dn_2;
+                baseDN2 = trim(baseDN2, "\"");
+                baseDN2 = trim(baseDN2, "'");
+                results = ctx.search(baseDN2, searchFilter, sc);
+            }
             String userDN = null;
             int matched = 0;
             for (; ; ) {
