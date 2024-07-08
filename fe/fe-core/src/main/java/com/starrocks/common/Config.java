@@ -1728,6 +1728,10 @@ public class Config extends ConfigBase {
     @ConfField(mutable = true)
     public static String authentication_ldap_simple_bind_base_dn = "";
 
+    @ConfField(mutable = true)
+    public static String authentication_ldap_simple_bind_base_dn_2 = "";
+
+
     /**
      * the name of the attribute that specifies usernames in LDAP directory entries for authentication_ldap_simple
      */
