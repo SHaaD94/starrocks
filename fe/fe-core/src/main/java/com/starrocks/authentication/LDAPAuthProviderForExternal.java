@@ -13,8 +13,10 @@
 // limitations under the License.
 package com.starrocks.authentication;
 
+import com.starrocks.mysql.MysqlPassword;
 import com.starrocks.mysql.privilege.AuthPlugin;
 import com.starrocks.mysql.privilege.Password;
+import com.starrocks.mysql.security.LdapSecurity;
 import com.starrocks.sql.ast.UserIdentity;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,15 +25,21 @@ public class LDAPAuthProviderForExternal implements AuthenticationProvider {
 
     @Override
     public UserAuthenticationInfo validAuthenticationInfo(UserIdentity userIdentity,
-                                                          String password, String textForAuthPlugin)
-            throws AuthenticationException {
-        throw new AuthenticationException("unsupported");
+                                                          String password, String textForAuthPlugin) {
+        UserAuthenticationInfo info = new UserAuthenticationInfo();
+        info.setPassword(MysqlPassword.EMPTY_PASSWORD);
+        info.setTextForAuthPlugin(textForAuthPlugin);
+        return info;
     }
 
     public static boolean authenticate(String username, String password,
                                        String host, String port,
                                        String baseDn, String searchAttr,
                                        String rootDn, String rootPwd) throws Exception {
+        if (!LdapSecurity.checkPasswordByRoot(username, password)) {
+            throw new AuthenticationException("[LDAPAuthProviderForExternal] Failed to authenticate for " +
+                    "[user: " + username + "] by ldap");
+        }
         return true;
     }
 
@@ -64,6 +72,11 @@ public class LDAPAuthProviderForExternal implements AuthenticationProvider {
     @Override
     public UserAuthenticationInfo upgradedFromPassword(UserIdentity userIdentity, Password password)
             throws AuthenticationException {
-        throw new AuthenticationException("unsupported");
+        UserAuthenticationInfo ret = new UserAuthenticationInfo();
+        ret.setPassword(password.getPassword());
+        ret.setAuthPlugin(PLUGIN_NAME);
+        ret.setOrigUserHost(userIdentity.getUser(), userIdentity.getHost());
+        ret.setTextForAuthPlugin(password.getUserForAuthPlugin());
+        return ret;
     }
 }
