@@ -219,6 +219,11 @@ statement
     | grantPrivilegeStatement
     | revokePrivilegeStatement
     | showGrantsStatement
+    | createSecurityIntegrationStatement
+    | alterSecurityIntegrationStatement
+    | dropSecurityIntegrationStatement
+    | showSecurityIntegrationStatement
+    | showCreateSecurityIntegrationStatement
 
     // Backup Restore Statement
     | backupStatement
@@ -1570,6 +1575,26 @@ showGrantsStatement
     : SHOW GRANTS
     | SHOW GRANTS FOR USER? user
     | SHOW GRANTS FOR ROLE identifierOrString
+    ;
+
+createSecurityIntegrationStatement
+    : CREATE SECURITY INTEGRATION identifier properties
+    ;
+
+alterSecurityIntegrationStatement
+    : ALTER SECURITY INTEGRATION identifier SET propertyList
+    ;
+
+dropSecurityIntegrationStatement
+    : DROP SECURITY INTEGRATION identifier
+    ;
+
+showSecurityIntegrationStatement
+    : SHOW SECURITY INTEGRATIONS
+    ;
+
+showCreateSecurityIntegrationStatement
+    : SHOW CREATE SECURITY INTEGRATION identifier
     ;
 
 authOption
