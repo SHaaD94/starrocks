@@ -1234,7 +1234,7 @@ vectorized_functions = [
     [170501, 'named_struct', True, False, 'ANY_STRUCT', ['ANY_ELEMENT', "..."], 'StructFunctions::named_struct'],
 
     # user function
-    [180000, 'is_role_in_session', True, False, 'BOOLEAN', ['VARCHAR'], 'nullptr']
+    [180000, 'is_role_in_session', True, False, 'BOOLEAN', ['VARCHAR'], 'nullptr'],
 
     # Agoda Function
     [990001, 'to_timestamp', True, False, 'DATETIME', ['VARCHAR', 'VARCHAR'],
@@ -1242,5 +1242,5 @@ vectorized_functions = [
     [990002, 'from_timestamp', True, False, 'VARCHAR', ['DATETIME', 'VARCHAR'], 'TimeFunctions::jodadatetime_format',
      'TimeFunctions::jodatime_format_prepare', 'TimeFunctions::jodatime_format_close'],
     [990003, 'from_timestamp', True, False, 'VARCHAR', ['DATE', 'VARCHAR'], 'TimeFunctions::jodadate_format',
-     'TimeFunctions::jodatime_format_prepare', 'TimeFunctions::jodatime_format_close'],
+     'TimeFunctions::jodatime_format_prepare', 'TimeFunctions::jodatime_format_close']
 ]
