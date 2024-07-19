@@ -1672,10 +1672,10 @@ StatusOr<ColumnPtr> TimeFunctions::_t_from_unix_with_format_general(FunctionCont
             continue;
         }
 
-        std::string new_fmt = convert_format(format);
+//        std::string new_fmt = convert_format(format);
 
         char buf[128];
-        if (!dtv.to_format_string((const char*)new_fmt.c_str(), new_fmt.size(), buf)) {
+        if (!dtv.to_joda_format_string((const char*)format.c_str(), format.size(), buf)) {
             result.append_null();
             continue;
         }
