@@ -1579,29 +1579,84 @@ StatusOr<ColumnPtr> TimeFunctions::from_unix_to_datetime_ms_64(FunctionContext* 
 }
 
 std::string TimeFunctions::convert_format(const Slice& format) {
-    switch (format.get_size()) {
-    case 8:
-        if (strncmp((const char*)format.get_data(), "yyyyMMdd", 8) == 0) {
-            std::string tmp("%Y%m%d");
-            return tmp;
-        }
-        break;
-    case 10:
-        if (strncmp((const char*)format.get_data(), "yyyy-MM-dd", 10) == 0) {
-            std::string tmp("%Y-%m-%d");
-            return tmp;
-        }
-        break;
-    case 19:
-        if (strncmp((const char*)format.get_data(), "yyyy-MM-dd HH:mm:ss", 19) == 0) {
-            std::string tmp("%Y-%m-%d %H:%i:%s");
-            return tmp;
-        }
-        break;
-    default:
-        break;
+    std::string format_str((const char*)format.get_data(), format.get_size());
+
+    // Replace ISO 8601 format specifiers with strftime format specifiers
+    std::string::size_type pos = 0;
+    while ((pos = format_str.find("yyyy", pos)) != std::string::npos) {
+        format_str.replace(pos, 4, "%Y");
+        pos += 2; // Move past the replacement
     }
-    return format.to_string();
+    pos = 0;
+    while ((pos = format_str.find("MM", pos)) != std::string::npos) {
+        format_str.replace(pos, 2, "%m");
+        pos += 2; // Move past the replacement
+    }
+    pos = 0;
+    while ((pos = format_str.find("dd", pos)) != std::string::npos) {
+        format_str.replace(pos, 2, "%d");
+        pos += 2; // Move past the replacement
+    }
+    pos = 0;
+    while ((pos = format_str.find("HH", pos)) != std::string::npos) {
+        format_str.replace(pos, 2, "%H");
+        pos += 2; // Move past the replacement
+    }
+    pos = 0;
+    while ((pos = format_str.find("mm", pos)) != std::string::npos) {
+        format_str.replace(pos, 2, "%M");
+        pos += 2; // Move past the replacement
+    }
+    pos = 0;
+    while ((pos = format_str.find("ss", pos)) != std::string::npos) {
+        format_str.replace(pos, 2, "%S");
+        pos += 2; // Move past the replacement
+    }
+    pos = 0;
+    while ((pos = format_str.find("SSS", pos)) != std::string::npos) {
+        format_str.replace(pos, 3, "%f");
+        pos += 3; // Move past the replacement
+    }
+    pos = 0;
+    while ((pos = format_str.find("XXX", pos)) != std::string::npos) {
+        format_str.replace(pos, 3, "%z");
+        pos += 3; // Move past the replacement
+    }
+    pos = 0;
+    while ((pos = format_str.find("Z", pos)) != std::string::npos) {
+        format_str.replace(pos, 1, "%z");
+        pos += 1; // Move past the replacement
+    }
+    pos = 0;
+    while ((pos = format_str.find("T", pos)) != std::string::npos) {
+        format_str.replace(pos, 1, " ");
+        pos += 1; // Move past the replacement
+    }
+
+    return format_str;
+//    switch (format.get_size()) {
+//    case 8:
+//        if (strncmp((const char*)format.get_data(), "yyyyMMdd", 8) == 0) {
+//            std::string tmp("%Y%m%d");
+//            return tmp;
+//        }
+//        break;
+//    case 10:
+//        if (strncmp((const char*)format.get_data(), "yyyy-MM-dd", 10) == 0) {
+//            std::string tmp("%Y-%m-%d");
+//            return tmp;
+//        }
+//        break;
+//    case 19:
+//        if (strncmp((const char*)format.get_data(), "yyyy-MM-dd HH:mm:ss", 19) == 0) {
+//            std::string tmp("%Y-%m-%d %H:%i:%s");
+//            return tmp;
+//        }
+//        break;
+//    default:
+//        break;
+//    }
+//    return format.to_string();
 }
 
 // regex method
@@ -1675,7 +1730,7 @@ StatusOr<ColumnPtr> TimeFunctions::_t_from_unix_with_format_general(FunctionCont
         std::string new_fmt = convert_format(format);
 
         char buf[128];
-        if (!dtv.to_joda_format_string((const char*)new_fmt.c_str(), new_fmt.size(), buf)) {
+        if (!dtv.to_format_string((const char*)new_fmt.c_str(), new_fmt.size(), buf)) {
             result.append_null();
             continue;
         }
@@ -1715,7 +1770,7 @@ StatusOr<ColumnPtr> TimeFunctions::_t_from_unix_with_format_const(std::string& f
         }
 
         char buf[128];
-        if (!dtv.to_joda_format_string((const char*)format_content.c_str(), format_content.size(), buf)) {
+        if (!dtv.to_format_string((const char*)format_content.c_str(), format_content.size(), buf)) {
             result.append_null();
             continue;
         }
