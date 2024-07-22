@@ -1667,7 +1667,7 @@ Status TimeFunctions::from_unix_prepare(FunctionContext* context, FunctionContex
     }
 
     state->format_content = convert_format(format);
-    LOG(INFO) << "format content " << state->format_content
+    LOG(INFO) << "format content " << state->format_content;
     return Status::OK();
 }
 
@@ -1715,7 +1715,7 @@ StatusOr<ColumnPtr> TimeFunctions::_t_from_unix_with_format_general(FunctionCont
         }
 
         std::string new_fmt = convert_format(format);
-        LOG(INFO) << "new format " << new_fmt
+        LOG(INFO) << "new format " << new_fmt;
 
         char buf[128];
         if (!dtv.to_format_string((const char*)new_fmt.c_str(), new_fmt.size(), buf)) {
