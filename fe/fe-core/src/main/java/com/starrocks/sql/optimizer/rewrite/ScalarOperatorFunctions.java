@@ -106,7 +106,7 @@ import static com.starrocks.catalog.PrimitiveType.VARCHAR;
  */
 public class ScalarOperatorFunctions {
     public static final Set<String> SUPPORT_JAVA_STYLE_DATETIME_FORMATTER =
-            ImmutableSet.<String>builder().add("yyyy-MM-dd").add("yyyy-MM-dd HH:mm:ss").add("yyyyMMdd").build();
+            ImmutableSet.<String>builder().add("yyyy-MM-dd").add("yyyy-MM-dd HH:mm:ss").add("yyyyMMdd").add("HH:mm:ss").build();
 
     private static final Pattern HAS_TIME_PART = Pattern.compile("^.*[HhIiklrSsT]+.*$");
 
