@@ -118,6 +118,10 @@ bool date::get_weeks_of_year_with_cache(JulianDate julian, int* weeks) {
 }
 
 int64_t date::standardize_date(int64_t value) {
+    // epoch time
+    if (value >= 1000000000 && value <= 9999999999){
+        return value;
+    }
     if (value <= 0) {
         return 0;
     }

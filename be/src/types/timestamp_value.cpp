@@ -57,6 +57,10 @@ bool TimestampValue::from_timestamp_literal(uint64_t timestamp) {
 
 bool TimestampValue::from_timestamp_literal_with_check(uint64_t timestamp) {
     timestamp = date::standardize_date(timestamp);
+    if (value >= 1000000000 && value <= 9999999999){
+        from_unixtime(value, TimezoneUtils::local_time_zone());
+        return true;
+    }
     if (timestamp <= 0) {
         return false;
     }
