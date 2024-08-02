@@ -2598,6 +2598,7 @@ baseType
     | LARGEINT typeParameter?
     | FLOAT
     | DOUBLE
+    | TIMESTAMP
     | DATE
     | DATETIME
     | TIME
