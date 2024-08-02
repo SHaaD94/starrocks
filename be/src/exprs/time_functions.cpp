@@ -927,25 +927,25 @@ Status TimeFunctions::time_slice_prepare(FunctionContext* context, FunctionConte
     if (boundary->type == LogicalType::TYPE_DATETIME) {
         // floor specify START as the result time.
         if (time_base == "floor") {
-            if (period_unit == "microsecond") {
+            if (period_unit == "microsecond" || period_unit == "microseconds") {
                 function = &TimeFunctions::time_slice_datetime_start_microsecond;
-            } else if (period_unit == "millisecond") {
+            } else if (period_unit == "millisecond" || period_unit == "milliseconds") {
                 function = &TimeFunctions::time_slice_datetime_start_millisecond;
-            } else if (period_unit == "second") {
+            } else if (period_unit == "second" || period_unit == "seconds") {
                 function = &TimeFunctions::time_slice_datetime_start_second;
-            } else if (period_unit == "minute") {
+            } else if (period_unit == "minute" || period_unit == "minutes") {
                 function = &TimeFunctions::time_slice_datetime_start_minute;
-            } else if (period_unit == "hour") {
+            } else if (period_unit == "hour" || period_unit == "hours") {
                 function = &TimeFunctions::time_slice_datetime_start_hour;
-            } else if (period_unit == "day") {
+            } else if (period_unit == "day" || period_unit == "days") {
                 function = &TimeFunctions::time_slice_datetime_start_day;
-            } else if (period_unit == "month") {
+            } else if (period_unit == "month" || period_unit == "months") {
                 function = &TimeFunctions::time_slice_datetime_start_month;
-            } else if (period_unit == "year") {
+            } else if (period_unit == "year" || period_unit == "years") {
                 function = &TimeFunctions::time_slice_datetime_start_year;
-            } else if (period_unit == "week") {
+            } else if (period_unit == "week" || period_unit == "weeks") {
                 function = &TimeFunctions::time_slice_datetime_start_week;
-            } else if (period_unit == "quarter") {
+            } else if (period_unit == "quarter" || period_unit == "quarters") {
                 function = &TimeFunctions::time_slice_datetime_start_quarter;
             } else {
                 return Status::InternalError(
@@ -955,25 +955,25 @@ Status TimeFunctions::time_slice_prepare(FunctionContext* context, FunctionConte
         } else {
             // ceil specify END as the result time.
             DCHECK_EQ(time_base, "ceil");
-            if (period_unit == "microsecond") {
+            if (period_unit == "microsecond" || period_unit == "microseconds") {
                 function = &TimeFunctions::time_slice_datetime_end_microsecond;
-            } else if (period_unit == "millisecond") {
+            } else if (period_unit == "millisecond" || period_unit == "milliseconds") {
                 function = &TimeFunctions::time_slice_datetime_end_millisecond;
-            } else if (period_unit == "second") {
+            } else if (period_unit == "second" || period_unit == "seconds") {
                 function = &TimeFunctions::time_slice_datetime_end_second;
-            } else if (period_unit == "minute") {
+            } else if (period_unit == "minute" || period_unit == "minutes") {
                 function = &TimeFunctions::time_slice_datetime_end_minute;
-            } else if (period_unit == "hour") {
+            } else if (period_unit == "hour" || period_unit == "hours") {
                 function = &TimeFunctions::time_slice_datetime_end_hour;
-            } else if (period_unit == "day") {
+            } else if (period_unit == "day" || period_unit == "days") {
                 function = &TimeFunctions::time_slice_datetime_end_day;
-            } else if (period_unit == "month") {
+            } else if (period_unit == "month" || period_unit == "months") {
                 function = &TimeFunctions::time_slice_datetime_end_month;
-            } else if (period_unit == "year") {
+            } else if (period_unit == "year" || period_unit == "years") {
                 function = &TimeFunctions::time_slice_datetime_end_year;
-            } else if (period_unit == "week") {
+            } else if (period_unit == "week" || period_unit == "weeks") {
                 function = &TimeFunctions::time_slice_datetime_end_week;
-            } else if (period_unit == "quarter") {
+            } else if (period_unit == "quarter" || period_unit == "quarters") {
                 function = &TimeFunctions::time_slice_datetime_end_quarter;
             } else {
                 return Status::InternalError(
@@ -984,17 +984,17 @@ Status TimeFunctions::time_slice_prepare(FunctionContext* context, FunctionConte
     } else {
         DCHECK_EQ(boundary->type, LogicalType::TYPE_DATE);
         if (time_base == "floor") {
-            if (period_unit == "second" || period_unit == "minute" || period_unit == "hour") {
+            if (period_unit == "second" || period_unit == "minute" || period_unit == "hour" || period_unit == "seconds" || period_unit == "minutes" || period_unit == "hours") {
                 return Status::InvalidArgument("can't use time_slice for date with time(hour/minute/second)");
-            } else if (period_unit == "day") {
+            } else if (period_unit == "day" || period_unit == "days") {
                 function = &TimeFunctions::time_slice_date_start_day;
-            } else if (period_unit == "month") {
+            } else if (period_unit == "month" || period_unit == "months") {
                 function = &TimeFunctions::time_slice_date_start_month;
-            } else if (period_unit == "year") {
+            } else if (period_unit == "year" || period_unit == "years") {
                 function = &TimeFunctions::time_slice_date_start_year;
-            } else if (period_unit == "week") {
+            } else if (period_unit == "week" || period_unit == "weeks") {
                 function = &TimeFunctions::time_slice_date_start_week;
-            } else if (period_unit == "quarter") {
+            } else if (period_unit == "quarter" || period_unit == "quarters") {
                 function = &TimeFunctions::time_slice_date_start_quarter;
             } else {
                 return Status::InternalError(
@@ -1002,17 +1002,17 @@ Status TimeFunctions::time_slice_prepare(FunctionContext* context, FunctionConte
             }
         } else {
             DCHECK_EQ(time_base, "ceil");
-            if (period_unit == "second" || period_unit == "minute" || period_unit == "hour") {
+            if (period_unit == "second" || period_unit == "minute" || period_unit == "hour" || period_unit == "seconds" || period_unit == "minutes" || period_unit == "hours") {
                 return Status::InvalidArgument("can't use time_slice for date with time(hour/minute/second)");
-            } else if (period_unit == "day") {
+            } else if (period_unit == "day" || period_unit == "days") {
                 function = &TimeFunctions::time_slice_date_end_day;
-            } else if (period_unit == "month") {
+            } else if (period_unit == "month" || period_unit == "months") {
                 function = &TimeFunctions::time_slice_date_end_month;
-            } else if (period_unit == "year") {
+            } else if (period_unit == "year" || period_unit == "years") {
                 function = &TimeFunctions::time_slice_date_end_year;
-            } else if (period_unit == "week") {
+            } else if (period_unit == "week" || period_unit == "weeks") {
                 function = &TimeFunctions::time_slice_date_end_week;
-            } else if (period_unit == "quarter") {
+            } else if (period_unit == "quarter" || period_unit == "quarters") {
                 function = &TimeFunctions::time_slice_date_end_quarter;
             } else {
                 return Status::InternalError(
