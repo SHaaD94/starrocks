@@ -212,6 +212,7 @@ public abstract class Type implements Cloneable {
                     .put("STRING", Type.DEFAULT_STRING)
                     .put("INTEGER", Type.INT)
                     .put("UNSIGNED", Type.INT)
+                    .put("TIMESTAMP". Type.DATETIME)
                     .putAll(SUPPORT_SCALAR_TYPE_LIST.stream()
                             .collect(Collectors.toMap(x -> x.getPrimitiveType().toString(), x -> (ScalarType) x)))
                     .build();
