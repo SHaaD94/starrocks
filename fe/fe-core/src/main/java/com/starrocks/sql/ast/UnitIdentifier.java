@@ -29,6 +29,9 @@ public class UnitIdentifier implements ParseNode {
 
     public UnitIdentifier(String description, NodePosition pos) {
         this.pos = pos;
+        if (description.endsWith("s") || description.endsWith("S")) {
+            description = description.substring(0, description.length() - 1);
+        }
         this.description = description.toUpperCase();
     }
 
