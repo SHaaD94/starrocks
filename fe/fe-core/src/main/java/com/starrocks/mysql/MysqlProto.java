@@ -176,7 +176,7 @@ public class MysqlProto {
         // Older version mysql client does not send auth plugin info, like 5.1 version.
         // So we check if auth plugin name is null and treat as mysql_native_password if is null.
         String authPluginName = authPacket.getPluginName();
-        LOG.info("handshake for user {} with auth plugin {}",authPacket.getUser(),authPluginName);
+        LOG.info("handshake for user {} with auth plugin {}", authPacket.getUser(), authPluginName);
         if (authPluginName != null && !handshakePacket.checkAuthPluginSameAsStarRocks(authPluginName)) {
             // 1. clear the serializer
             serializer.reset();
