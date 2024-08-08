@@ -132,7 +132,7 @@ public class MysqlHandshakePacket extends MysqlPacket {
     // it will create a AuthSwitchRequest
     public void buildAuthSwitchRequest(MysqlSerializer serializer) {
         serializer.writeInt1((byte) 0xfe);
-        serializer.writeNulTerminateString(NATIVE_AUTH_PLUGIN_NAME);
+        serializer.writeNulTerminateString(CLEAR_PASSWORD_PLUGIN_NAME);
         serializer.writeBytes(authPluginData);
         serializer.writeInt1(0);
     }
