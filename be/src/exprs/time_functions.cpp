@@ -684,7 +684,7 @@ DEFINE_UNARY_FN_WITH_IMPL(week_of_year_with_default_modeImpl, t) {
     int year = 0, month = 0, day = 0;
     date_value.to_date(&year, &month, &day);
     uint to_year = 0;
-    return TimeFunctions::compute_week(year, month, day, TimeFunctions::week_mode(0), &to_year);
+    return TimeFunctions::compute_week(year, month, day, TimeFunctions::week_mode(3), &to_year);
 }
 DEFINE_TIME_UNARY_FN(week_of_year_with_default_mode, TYPE_DATETIME, TYPE_INT);
 

@@ -497,7 +497,7 @@ public class ScalarOperatorFunctions {
     })
     public static ConstantOperator week(ConstantOperator arg) {
         LocalDateTime dt = arg.getDatetime();
-        long result = TimeFunctions.computeWeek(dt.getYear(), dt.getMonthValue(), dt.getDayOfMonth(), 0);
+        long result = TimeFunctions.computeWeek(dt.getYear(), dt.getMonthValue(), dt.getDayOfMonth(), 3);
         return ConstantOperator.createInt((int) result);
     }
 
