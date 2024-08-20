@@ -23,10 +23,14 @@ import com.starrocks.sql.optimizer.operator.logical.LogicalCTEProduceOperator;
 import com.starrocks.sql.optimizer.statistics.ColumnStatistic;
 import com.starrocks.sql.optimizer.statistics.Statistics;
 import com.starrocks.sql.optimizer.statistics.StatisticsCalculator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.BitSet;
 
 public class CTEUtils {
+    private static final Logger LOG = LogManager.getLogger(CTEUtils.class);
+
     public static void collectCteOperators(OptExpression anchor, OptimizerContext context) {
         context.getCteContext().reset();
         collectCteOperatorsImpl(anchor, context, new BitSet());
