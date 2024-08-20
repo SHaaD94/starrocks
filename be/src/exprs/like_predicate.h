@@ -33,6 +33,10 @@ public:
     // Like method
     static Status like_prepare(FunctionContext* context, FunctionContext::FunctionStateScope scope);
 
+    static Status ilike_prepare(FunctionContext* context, FunctionContext::FunctionStateScope scope);
+
+    static Status like_prepare_internal(FunctionContext* context, FunctionContext::FunctionStateScope scope, bool case_sensitive);
+
     static Status like_close(FunctionContext* context, FunctionContext::FunctionStateScope scope);
 
     /**
@@ -167,7 +171,7 @@ private:
                                              const Slice& slice);
     template <bool full_match>
     static Status compile_with_hyperscan_or_re2(const std::string& pattern, LikePredicateState* state,
-                                                FunctionContext* context, const Slice& slice);
+                                                FunctionContext* context, const Slice& slice, bool case_sensitive);
     struct LikePredicateState {
         char escape_char{'\\'};
 

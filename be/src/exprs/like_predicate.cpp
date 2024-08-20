@@ -69,11 +69,12 @@ bool LikePredicate::hs_compile_and_alloc_scratch(const std::string& pattern, Lik
 
 template <bool full_match>
 Status LikePredicate::compile_with_hyperscan_or_re2(const std::string& pattern, LikePredicateState* state,
-                                                    FunctionContext* context, const Slice& slice) {
+                                                    FunctionContext* context, const Slice& slice, bool case_sensitive) {
     if (!hs_compile_and_alloc_scratch(pattern, state, context, slice)) {
         RE2::Options opts;
         opts.set_never_nl(false);
         opts.set_dot_nl(true);
+        opts.set_case_sensitive(case_sensitive);
         opts.set_log_errors(false);
 
         state->re2 = std::make_shared<re2::RE2>(pattern, opts);
@@ -100,6 +101,14 @@ Status LikePredicate::compile_with_hyperscan_or_re2(const std::string& pattern, 
 
 // like predicate
 Status LikePredicate::like_prepare(FunctionContext* context, FunctionContext::FunctionStateScope scope) {
+    like_prepare_internal(context, scope, true)
+}
+
+Status LikePredicate::ilike_prepare(FunctionContext* context, FunctionContext::FunctionStateScope scope) {
+    like_prepare_internal(context, scope, false)
+}
+
+Status LikePredicate::like_prepare_internal(FunctionContext* context, FunctionContext::FunctionStateScope scope, bool case_sensitive) {
     if (scope != FunctionContext::THREAD_LOCAL) {
         return Status::OK();
     }
@@ -120,25 +129,25 @@ Status LikePredicate::like_prepare(FunctionContext* context, FunctionContext::Fu
     std::string pattern_str = pattern.to_string();
     std::string search_string;
 
-    if (RE2::FullMatch(pattern_str, LIKE_ENDS_WITH_RE, &search_string)) {
+    if (case_sensitive && RE2::FullMatch(pattern_str, LIKE_ENDS_WITH_RE, &search_string)) {
         remove_escape_character(&search_string);
         state->set_search_string(search_string);
         state->function = &constant_ends_with_fn;
-    } else if (RE2::FullMatch(pattern_str, LIKE_STARTS_WITH_RE, &search_string)) {
+    } else if (case_sensitive && RE2::FullMatch(pattern_str, LIKE_STARTS_WITH_RE, &search_string)) {
         remove_escape_character(&search_string);
         state->set_search_string(search_string);
         state->function = &constant_starts_with_fn;
-    } else if (RE2::FullMatch(pattern_str, LIKE_EQUALS_RE, &search_string)) {
+    } else if (case_sensitive && RE2::FullMatch(pattern_str, LIKE_EQUALS_RE, &search_string)) {
         remove_escape_character(&search_string);
         state->set_search_string(search_string);
         state->function = &constant_equals_fn;
-    } else if (RE2::FullMatch(pattern_str, LIKE_SUBSTRING_RE, &search_string)) {
+    } else if (case_sensitive && RE2::FullMatch(pattern_str, LIKE_SUBSTRING_RE, &search_string)) {
         remove_escape_character(&search_string);
         state->set_search_string(search_string);
         state->function = &constant_substring_fn;
     } else {
         auto re_pattern = LikePredicate::template convert_like_pattern<true>(context, pattern);
-        RETURN_IF_ERROR(compile_with_hyperscan_or_re2<true>(re_pattern, state, context, pattern));
+        RETURN_IF_ERROR(compile_with_hyperscan_or_re2<true>(re_pattern, state, context, pattern, case_sensitive));
     }
 
     return Status::OK();
@@ -198,7 +207,7 @@ Status LikePredicate::regex_prepare(FunctionContext* context, FunctionContext::F
         state->set_search_string(search_string);
         state->function = &constant_substring_fn;
     } else {
-        RETURN_IF_ERROR(compile_with_hyperscan_or_re2<false>(pattern_str, state, context, pattern));
+        RETURN_IF_ERROR(compile_with_hyperscan_or_re2<false>(pattern_str, state, context, pattern, true));
     }
 
     return Status::OK();
