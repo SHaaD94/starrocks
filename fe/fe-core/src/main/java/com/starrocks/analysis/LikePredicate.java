@@ -47,6 +47,7 @@ public class LikePredicate extends Predicate {
 
     public enum Operator {
         LIKE("LIKE"),
+        ILIKE("ILIKE"),
         REGEXP("REGEXP");
 
         private final String description;
