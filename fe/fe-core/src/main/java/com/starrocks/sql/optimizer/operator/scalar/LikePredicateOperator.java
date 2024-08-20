@@ -43,11 +43,16 @@ public class LikePredicateOperator extends PredicateOperator {
 
     public enum LikeType {
         LIKE,
+        ILIKE,
         REGEXP
     }
 
     public boolean isRegexp() {
         return LikeType.REGEXP.equals(this.likeType);
+    }
+
+    public boolean isLike() {
+        return LikeType.LIKE.equals(this.likeType);
     }
 
     public LikeType getLikeType() {
@@ -58,6 +63,10 @@ public class LikePredicateOperator extends PredicateOperator {
     public String toString() {
         if (LikeType.LIKE.equals(likeType)) {
             return getChild(0).toString() + " LIKE " + getChild(1).toString();
+        }
+
+        if (LikeType.ILIKE.equals(likeType)) {
+            return getChild(0).toString() + " ILIKE " + getChild(1).toString();
         }
 
         return getChild(0).toString() + " REGEXP " + getChild(1).toString();
@@ -72,6 +81,10 @@ public class LikePredicateOperator extends PredicateOperator {
     public String debugString() {
         if (LikeType.LIKE.equals(likeType)) {
             return getChild(0).debugString() + " LIKE " + getChild(1).debugString();
+        }
+
+        if (LikeType.ILIKE.equals(likeType)) {
+            return getChild(0).toString() + " ILIKE " + getChild(1).toString();
         }
 
         return getChild(0).debugString() + " REGEXP " + getChild(1).debugString();

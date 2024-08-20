@@ -5874,15 +5874,9 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
                     (Expr) visit(context.value),
                     (Expr) visit(context.pattern),
                     pos);
-        } else if (context.LIKE() != null) {
-            likePredicate = new LikePredicate(
-                    LikePredicate.Operator.LIKE,
-                    (Expr) visit(context.value),
-                    (Expr) visit(context.pattern),
-                    pos);
         } else {
             likePredicate = new LikePredicate(
-                    LikePredicate.Operator.ILIKE,
+                    LikePredicate.Operator.LIKE,
                     (Expr) visit(context.value),
                     (Expr) visit(context.pattern),
                     pos);
