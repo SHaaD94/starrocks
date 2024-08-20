@@ -115,7 +115,12 @@ public class CTEUtils {
         ExpressionContext expressionContext = new ExpressionContext(expr);
         StatisticsCalculator statisticsCalculator = new StatisticsCalculator(
                 expressionContext, context.getColumnRefFactory(), context);
-        statisticsCalculator.estimatorStats();
+        try {
+            statisticsCalculator.estimatorStats();
+        } catch (Exception e) {
+            LOG.warn("Failed to calculate statistics for expression: {}", expr, e);
+            return;
+        }
 
         if (OperatorType.LOGICAL_OLAP_SCAN.equals(expr.getOp().getOpType()) &&
                 expressionContext.getStatistics().getColumnStatistics().values().stream()
