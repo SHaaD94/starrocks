@@ -648,8 +648,10 @@ public final class SqlToScalarOperatorTranslator {
 
             if (LikePredicate.Operator.LIKE.equals(node.getOp())) {
                 return new LikePredicateOperator(LikePredicateOperator.LikeType.LIKE, children);
-            } else {
+            } else if (LikePredicate.Operator.REGEXP.equals(node.getOp())) {
                 return new LikePredicateOperator(LikePredicateOperator.LikeType.REGEXP, children);
+            } else {
+                return new LikePredicateOperator(LikePredicateOperator.LikeType.ILIKE, children);
             }
         }
 
