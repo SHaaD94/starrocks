@@ -171,7 +171,7 @@ private:
                                              const Slice& slice);
     template <bool full_match>
     static Status compile_with_hyperscan_or_re2(const std::string& pattern, LikePredicateState* state,
-                                                FunctionContext* context, const Slice& slice, bool case_sensitive);
+                                                FunctionContext* context, const Slice& slice);
     struct LikePredicateState {
         char escape_char{'\\'};
 
