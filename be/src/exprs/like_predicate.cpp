@@ -468,6 +468,8 @@ StatusOr<ColumnPtr> LikePredicate::regex_match_full(FunctionContext* context, co
     ColumnViewer<TYPE_VARCHAR> value_viewer(value_column);
     ColumnBuilder<TYPE_BOOLEAN> result(num_rows);
 
+    auto state = reinterpret_cast<LikePredicateState*>(context->get_function_state(FunctionContext::THREAD_LOCAL));
+
     // pattern is constant value, use context's regex
     if (context->is_constant_column(1)) {
         if (!pattern_column->only_null()) {
