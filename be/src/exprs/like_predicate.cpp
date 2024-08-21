@@ -101,11 +101,13 @@ Status LikePredicate::compile_with_hyperscan_or_re2(const std::string& pattern, 
 
 // like predicate
 Status LikePredicate::like_prepare(FunctionContext* context, FunctionContext::FunctionStateScope scope) {
+    LOG(INFO) << "like_prepare call"
     like_prepare_internal(context, scope, true);
     return Status::OK();
 }
 
 Status LikePredicate::ilike_prepare(FunctionContext* context, FunctionContext::FunctionStateScope scope) {
+    LOG(INFO) << "ilike_prepare call"
     like_prepare_internal(context, scope, false);
     return Status::OK();
 }
