@@ -188,6 +188,9 @@ private:
         /// Holds the string the StringValue points to and is set any time.
         std::string search_string;
 
+        /// Used for ILIKE and IREGEXP predicates if the pattern is not a constant argument.
+        bool case_sensitive_;
+
         /// Used for LIKE predicates if the pattern is a constant argument, and is either a
         /// constant string or has a constant string at the beginning or end of the pattern.
         /// This will be set in order to check for that pattern in the corresponding part of

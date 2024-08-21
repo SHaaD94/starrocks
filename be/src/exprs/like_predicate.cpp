@@ -69,12 +69,12 @@ bool LikePredicate::hs_compile_and_alloc_scratch(const std::string& pattern, Lik
 
 template <bool full_match>
 Status LikePredicate::compile_with_hyperscan_or_re2(const std::string& pattern, LikePredicateState* state,
-                                                    FunctionContext* context, const Slice& slice, bool case_sensitive) {
+                                                    FunctionContext* context, const Slice& slice) {
     if (!hs_compile_and_alloc_scratch(pattern, state, context, slice)) {
         RE2::Options opts;
         opts.set_never_nl(false);
         opts.set_dot_nl(true);
-        opts.set_case_sensitive(case_sensitive);
+        opts.set_case_sensitive(state->case_sensitive_);
         opts.set_log_errors(false);
 
         state->re2 = std::make_shared<re2::RE2>(pattern, opts);
@@ -120,7 +120,7 @@ Status LikePredicate::like_prepare_internal(FunctionContext* context, FunctionCo
     // @todo: should replace to mem pool
     auto state = new LikePredicateState();
     state->function = &like_fn;
-
+    state->case_sensitive_ = case_sensitive;
     context->set_function_state(scope, state);
 
     // go row regex
@@ -151,7 +151,7 @@ Status LikePredicate::like_prepare_internal(FunctionContext* context, FunctionCo
         state->function = &constant_substring_fn;
     } else {
         auto re_pattern = LikePredicate::template convert_like_pattern<true>(context, pattern);
-        RETURN_IF_ERROR(compile_with_hyperscan_or_re2<true>(re_pattern, state, context, pattern, case_sensitive));
+        RETURN_IF_ERROR(compile_with_hyperscan_or_re2<true>(re_pattern, state, context, pattern));
     }
 
     return Status::OK();
@@ -179,7 +179,7 @@ Status LikePredicate::regex_prepare(FunctionContext* context, FunctionContext::F
     // @todo: should replace to mem pool
     auto* state = new LikePredicateState();
     context->set_function_state(scope, state);
-
+    state->case_sensitive_ = true;
     state->function = &regex_fn;
 
     // go row regex
@@ -211,7 +211,7 @@ Status LikePredicate::regex_prepare(FunctionContext* context, FunctionContext::F
         state->set_search_string(search_string);
         state->function = &constant_substring_fn;
     } else {
-        RETURN_IF_ERROR(compile_with_hyperscan_or_re2<false>(pattern_str, state, context, pattern, true));
+        RETURN_IF_ERROR(compile_with_hyperscan_or_re2<false>(pattern_str, state, context, pattern));
     }
 
     return Status::OK();
@@ -484,6 +484,7 @@ StatusOr<ColumnPtr> LikePredicate::regex_match_full(FunctionContext* context, co
     opts.set_never_nl(false);
     opts.set_dot_nl(true);
     opts.set_log_errors(false);
+    opts.set_case_sensitive(state->case_sensitive_);
 
     for (int row = 0; row < num_rows; ++row) {
         if (value_viewer.is_null(row) || pattern_viewer.is_null(row)) {
