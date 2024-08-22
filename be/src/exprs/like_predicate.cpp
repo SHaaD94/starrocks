@@ -46,7 +46,12 @@ static const char* PROMPT_INFO = " so we switch to use re2.";
 
 bool LikePredicate::hs_compile_and_alloc_scratch(const std::string& pattern, LikePredicateState* state,
                                                  FunctionContext* context, const Slice& slice) {
-    if (hs_compile(pattern.c_str(), HS_FLAG_ALLOWEMPTY | HS_FLAG_DOTALL | HS_FLAG_UTF8 | HS_FLAG_SINGLEMATCH,
+    // Determine flags based on case sensitivity
+    unsigned int flags = HS_FLAG_ALLOWEMPTY | HS_FLAG_DOTALL | HS_FLAG_UTF8 | HS_FLAG_SINGLEMATCH;
+    if (!state->case_sensitive_) {
+            flags |= HS_FLAG_CASELESS;
+    }
+    if (hs_compile(pattern.c_str(), flags,
                    HS_MODE_BLOCK, nullptr, &state->database, &state->compile_err) != HS_SUCCESS) {
         std::stringstream error;
         error << "Invalid hyperscan expression: " << std::string(slice.data, slice.size) << ": "
