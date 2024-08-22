@@ -76,7 +76,7 @@ Status LikePredicate::compile_with_hyperscan_or_re2(const std::string& pattern, 
         opts.set_dot_nl(true);
         opts.set_case_sensitive(state->case_sensitive_);
         opts.set_log_errors(false);
-
+        LOG(INFO) << "compile_with_hyperscan_or_re2 case_sensitive is " << state->case_sensitive_;
         state->re2 = std::make_shared<re2::RE2>(pattern, opts);
         if (!state->re2->ok()) {
             std::stringstream error;
@@ -102,14 +102,12 @@ Status LikePredicate::compile_with_hyperscan_or_re2(const std::string& pattern, 
 // like predicate
 Status LikePredicate::like_prepare(FunctionContext* context, FunctionContext::FunctionStateScope scope) {
     LOG(INFO) << "like_prepare call";
-    like_prepare_internal(context, scope, true);
-    return Status::OK();
+    return like_prepare_internal(context, scope, true);
 }
 
 Status LikePredicate::ilike_prepare(FunctionContext* context, FunctionContext::FunctionStateScope scope) {
     LOG(INFO) << "ilike_prepare call";
-    like_prepare_internal(context, scope, false);
-    return Status::OK();
+    return like_prepare_internal(context, scope, false);
 }
 
 Status LikePredicate::like_prepare_internal(FunctionContext* context, FunctionContext::FunctionStateScope scope, bool case_sensitive) {
@@ -487,6 +485,8 @@ StatusOr<ColumnPtr> LikePredicate::regex_match_full(FunctionContext* context, co
     opts.set_dot_nl(true);
     opts.set_log_errors(false);
     opts.set_case_sensitive(state->case_sensitive_);
+
+    LOG(INFO) << "regex_match_full case_sensitive is " << state->case_sensitive_;
 
     for (int row = 0; row < num_rows; ++row) {
         if (value_viewer.is_null(row) || pattern_viewer.is_null(row)) {
