@@ -90,6 +90,7 @@ Status LikePredicate::compile_with_hyperscan_or_re2(const std::string& pattern, 
             state->function = &regex_fn_with_long_constant_pattern;
         }
     }
+    LOG(INFO) << "compile_with_hyperscan_or_re2 not if case_sensitive is " << state->case_sensitive_;
 
     return Status::OK();
 }
@@ -117,9 +118,9 @@ Status LikePredicate::like_prepare_internal(FunctionContext* context, FunctionCo
 
     // @todo: should replace to mem pool
     auto state = new LikePredicateState();
+    context->set_function_state(scope, state);
     state->function = &like_fn;
     state->case_sensitive_ = case_sensitive;
-    context->set_function_state(scope, state);
 
     // go row regex
     if (!context->is_notnull_constant_column(1)) {
@@ -148,6 +149,7 @@ Status LikePredicate::like_prepare_internal(FunctionContext* context, FunctionCo
         state->set_search_string(search_string);
         state->function = &constant_substring_fn;
     } else {
+        LOG(INFO) << "like_prepare_internal last condition";
         auto re_pattern = LikePredicate::template convert_like_pattern<true>(context, pattern);
         RETURN_IF_ERROR(compile_with_hyperscan_or_re2<true>(re_pattern, state, context, pattern));
     }
@@ -404,7 +406,7 @@ StatusOr<ColumnPtr> LikePredicate::constant_substring_fn(FunctionContext* contex
 StatusOr<ColumnPtr> LikePredicate::regex_match(FunctionContext* context, const starrocks::Columns& columns,
                                                bool is_like_pattern) {
     RETURN_IF_COLUMNS_ONLY_NULL(columns);
-
+    LOG(INFO) << "regex_match is_like_pattern = " << is_like_pattern;
     if (is_like_pattern) {
         return regex_match_full(context, columns);
     } else {
@@ -519,6 +521,8 @@ StatusOr<ColumnPtr> LikePredicate::regex_match_partial(FunctionContext* context,
     ColumnViewer<TYPE_VARCHAR> value_viewer(value_column);
     ColumnBuilder<TYPE_BOOLEAN> result(num_rows);
 
+    auto state = reinterpret_cast<LikePredicateState*>(context->get_function_state(FunctionContext::THREAD_LOCAL));
+
     // pattern is constant value, use context's regex
     if (context->is_constant_column(1)) {
         if (!pattern_column->only_null()) {
@@ -535,6 +539,8 @@ StatusOr<ColumnPtr> LikePredicate::regex_match_partial(FunctionContext* context,
     opts.set_never_nl(false);
     opts.set_dot_nl(true);
     opts.set_log_errors(false);
+
+    LOG(INFO) << "regex_match_partial case_sensitive is " << state->case_sensitive_;
 
     for (int row = 0; row < num_rows; ++row) {
         if (value_viewer.is_null(row) || pattern_viewer.is_null(row)) {
@@ -570,6 +576,8 @@ std::string LikePredicate::convert_like_pattern(FunctionContext* context, const 
     if constexpr (fullMatch) {
         re_pattern.append("^");
     }
+
+    LOG(INFO) << "convert_like_pattern case_sensitive is " << state->case_sensitive_;
 
     for (int i = 0; i < pattern.size; ++i) {
         if (!is_escaped && pattern.data[i] == '%') {
