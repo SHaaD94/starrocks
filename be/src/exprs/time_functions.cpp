@@ -1448,7 +1448,7 @@ StatusOr<ColumnPtr> TimeFunctions::_t_to_unix_from_datetime_with_format(Function
         bool parse_success = false;
 
         // Check if the format contains '%'
-        if (format.find('%') != std::string::npos) {
+        if (std::string(format.data, format.size).find('%') != std::string::npos) {
             // Use the standard date format parsing
             parse_success = tv.from_date_format_str(format.data, format.size, date.data, date.size);
         } else {
