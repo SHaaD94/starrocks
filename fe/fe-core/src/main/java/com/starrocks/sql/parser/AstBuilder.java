@@ -6113,10 +6113,13 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
 
         if (functionName.equals(FunctionSet.ISNULL)) {
             List<Expr> params = visit(context.expression(), Expr.class);
-            if (params.size() != 1) {
+            if (params.size() == 1) {
+                return new IsNullPredicate(params.get(0), false, pos);
+            } else if (params.size() == 2) {
+                return new FunctionCallExpr(FunctionSet.IFNULL, params, pos);
+            } else {
                 throw new ParsingException(PARSER_ERROR_MSG.wrongNumOfArgs(functionName), pos);
             }
-            return new IsNullPredicate(params.get(0), false, pos);
         }
 
         if (functionName.equals(FunctionSet.ISNOTNULL)) {
