@@ -1453,7 +1453,7 @@ StatusOr<ColumnPtr> TimeFunctions::_t_to_unix_from_datetime_with_format(Function
             parse_success = tv.from_date_format_str(format.data, format.size, date.data, date.size);
         } else {
             // Use the Joda date format parsing
-            parse_success = tv.from_joda_date_format_str(format.data, format.size, date.data, date.size, nullptr);
+            parse_success = tv.from_joda_date_format_str(format.data, format.size, date.data, date.size);
         }
 
         if (!parse_success) {

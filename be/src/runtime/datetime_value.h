@@ -194,6 +194,11 @@ public:
         return from_date_format_str(format, format_len, value, value_len, nullptr);
     }
 
+    bool from_joda_date_format_str(const char* format, int format_len, const char* value, int value_len) {
+        memset(this, 0, sizeof(*this));
+        return from_joda_date_format_str(format, format_len, value, value_len, nullptr);
+    }
+
     operator int64_t() const { return to_int64(); }
 
     // Given days since 0000-01-01, construct the datetime value.
@@ -470,6 +475,9 @@ protected:
 
     bool from_date_format_str(const char* format, int format_len, const char* value, int value_len,
                               const char** sub_val_end);
+
+    bool from_joda_date_format_str(const char* format, int format_len, const char* value, int value_len,
+                                  const char** sub_val_end);
 
     // 1 bits for neg. 3 bits for type. 12bit for hour
     uint16_t _neg : 1;  // Used for time value.
