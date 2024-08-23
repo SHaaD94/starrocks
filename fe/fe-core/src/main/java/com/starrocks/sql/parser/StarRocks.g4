@@ -2324,6 +2324,7 @@ specialFunctionExpression
     | PASSWORD '(' string ')'
     | FLOOR '(' expression ')'
     | CEIL '(' expression ')'
+    | ILIKE '(' expression ',' expression ')'
     ;
 
 windowFunction

@@ -6424,6 +6424,8 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
             return new FunctionCallExpr("floor", visit(context.expression(), Expr.class), pos);
         } else if (context.CEIL() != null) {
             return new FunctionCallExpr("ceil", visit(context.expression(), Expr.class), pos);
+        } else if (context.ILIKE() != null) {
+            return new FunctionCallExpr("ilike", visit(context.expression(), Expr.class), pos);
         }
 
         String functionName = context.TIMESTAMPADD() != null ? "TIMESTAMPADD" : "TIMESTAMPDIFF";
