@@ -1445,7 +1445,18 @@ StatusOr<ColumnPtr> TimeFunctions::_t_to_unix_from_datetime_with_format(Function
             continue;
         }
         DateTimeValue tv;
-        if (!tv.from_date_format_str(format.data, format.size, date.data, date.size)) {
+        bool success = false;
+
+        // Check if the format string contains a '%'
+        if (std::string(format.data, format.size).find('%') == std::string::npos) {
+            // If no '%', use to_joda_format_string
+            success = tv.to_joda_format_string(format.data, format.size, date.data);
+        } else {
+            // Otherwise, use from_date_format_str
+            success = tv.from_date_format_str(format.data, format.size, date.data, date.size);
+        }
+
+        if (!success) {
             result.append_null();
             continue;
         }
