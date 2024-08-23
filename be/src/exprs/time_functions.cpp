@@ -1465,6 +1465,7 @@ StatusOr<ColumnPtr> TimeFunctions::_t_to_unix_from_datetime_with_format(Function
             result.append_null();
             continue;
         }
+        LOG(INFO) << "_t_to_unix_from_datetime_with_format " << timestamp;
 
         timestamp = timestamp < 0 ? 0 : timestamp;
         timestamp = timestamp > MAX_UNIX_TIMESTAMP ? 0 : timestamp;
