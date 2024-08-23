@@ -2241,6 +2241,32 @@ bool DateTimeValue::from_date_format_str(const char* format, int format_len, con
     return true;
 }
 
+bool DateTimeValue::from_joda_date_format_str(const char* format, int format_len, const char* value, int value_len, const char** sub_val_end) {
+    // Create a JodaFormat object
+    joda::JodaFormat jodaFormat;
+
+    // Prepare the JodaFormat with the given format string
+    if (!jodaFormat.prepare(std::string_view(format, format_len))) {
+        return false; // Return false if the format is invalid
+    }
+
+    // Parse the value string using the JodaFormat
+    DateTimeValue output;
+    if (!jodaFormat.parse(std::string_view(value, value_len), &output)) {
+        return false; // Return false if parsing fails
+    }
+
+    // Set the parsed DateTimeValue to the current object
+    *this = output;
+
+    // Optionally set the sub_val_end to the end of the parsed string
+    if (sub_val_end) {
+        *sub_val_end = value + value_len;
+    }
+
+    return true; // Return true if parsing is successful
+}
+
 bool DateTimeValue::date_add_interval(const TimeInterval& interval, TimeUnit unit) {
     int sign = interval.is_neg ? -1 : 1;
     switch (unit) {

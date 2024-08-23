@@ -1445,21 +1445,22 @@ StatusOr<ColumnPtr> TimeFunctions::_t_to_unix_from_datetime_with_format(Function
             continue;
         }
         DateTimeValue tv;
-        bool success = false;
+        bool parse_success = false;
 
-        // Check if the format string contains a '%'
-        if (std::string(format.data, format.size).find('%') == std::string::npos) {
-            // If no '%', use to_joda_format_string
-            success = tv.to_joda_format_string(format.data, format.size, date.data);
+        // Check if the format contains '%'
+        if (format.find('%') != std::string::npos) {
+            // Use the standard date format parsing
+            parse_success = tv.from_date_format_str(format.data, format.size, date.data, date.size);
         } else {
-            // Otherwise, use from_date_format_str
-            success = tv.from_date_format_str(format.data, format.size, date.data, date.size);
+            // Use the Joda date format parsing
+            parse_success = tv.from_joda_date_format_str(format.data, format.size, date.data, date.size, nullptr);
         }
 
-        if (!success) {
+        if (!parse_success) {
             result.append_null();
             continue;
         }
+
         int64_t timestamp;
         if (!tv.unix_timestamp(&timestamp, context->state()->timezone_obj())) {
             result.append_null();
