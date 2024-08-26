@@ -184,7 +184,7 @@ public enum PrimitiveType {
             builder.putAll(decimalType, BOOLEAN);
             builder.putAll(decimalType, NUMBER_TYPE_LIST);
             builder.putAll(decimalType, STRING_TYPE_LIST);
-            builder.putAll(decimalType, TIME);
+            builder.putAll(decimalType, TIME_TYPE_LIST);
         }
 
         // TIME
