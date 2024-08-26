@@ -1244,5 +1244,9 @@ vectorized_functions = [
     [990002, 'from_timestamp', True, False, 'VARCHAR', ['DATETIME', 'VARCHAR'], 'TimeFunctions::jodadatetime_format',
      'TimeFunctions::jodatime_format_prepare', 'TimeFunctions::jodatime_format_close'],
     [990003, 'from_timestamp', True, False, 'VARCHAR', ['DATE', 'VARCHAR'], 'TimeFunctions::jodadate_format',
-     'TimeFunctions::jodatime_format_prepare', 'TimeFunctions::jodatime_format_close']
+     'TimeFunctions::jodatime_format_prepare', 'TimeFunctions::jodatime_format_close'],
+    [990004, 'btrim', True, False, 'VARCHAR', ['VARCHAR'], 'StringFunctions::trim',
+     'StringFunctions::trim_prepare', 'StringFunctions::trim_close'],
+    [990005, 'btrim', True, False, 'VARCHAR', ['VARCHAR', 'VARCHAR'], 'StringFunctions::trim',
+     'StringFunctions::trim_prepare', 'StringFunctions::trim_close'],
 ]
