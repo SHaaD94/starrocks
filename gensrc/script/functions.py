@@ -1249,4 +1249,8 @@ vectorized_functions = [
      'StringFunctions::trim_prepare', 'StringFunctions::trim_close'],
     [990005, 'btrim', True, False, 'VARCHAR', ['VARCHAR', 'VARCHAR'], 'StringFunctions::trim',
      'StringFunctions::trim_prepare', 'StringFunctions::trim_close'],
+    [990006, 'regexp_like', True, False, 'BOOLEAN', ['VARCHAR', 'VARCHAR'], 'LikePredicate::regex',
+     'LikePredicate::regex_prepare', 'LikePredicate::regex_close'],
+    [990007, 'to_timestamp', True, False, 'VARCHAR', ['BIGINT'], 'TimeFunctions::from_unix_to_datetime_64'],
+    [990008, 'to_timestamp', True, False, 'VARCHAR', ['INT'], 'TimeFunctions::from_unix_to_datetime_32'],
 ]
