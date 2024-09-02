@@ -91,6 +91,8 @@ import com.starrocks.sql.ast.ViewRelation;
 import com.starrocks.sql.common.MetaUtils;
 import com.starrocks.sql.common.TypeManager;
 import com.starrocks.sql.optimizer.dump.HiveMetaStoreTableDumpInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -111,6 +113,7 @@ import static com.starrocks.thrift.PlanNodesConstants.BINLOG_TIMESTAMP_COLUMN_NA
 import static com.starrocks.thrift.PlanNodesConstants.BINLOG_VERSION_COLUMN_NAME;
 
 public class QueryAnalyzer {
+    private static final Logger LOG = LogManager.getLogger(QueryAnalyzer.class);
     private final ConnectContext session;
     private final MetadataMgr metadataMgr;
 
@@ -156,10 +159,6 @@ public class QueryAnalyzer {
 
             if (!stmt.hasWithClause()) {
                 return cteScope;
-            }
-
-            if (ConnectContext.get() != null) {
-                ConnectContext.get().setRelationAliasCaseInSensitive(true);
             }
 
             for (CTERelation withQuery : stmt.getCteRelations()) {
@@ -344,7 +343,8 @@ public class QueryAnalyzer {
                             resolveTableName.getDb(),
                             resolveTableName.getTbl()));
                 }
-
+                LOG.info("resolveTableRef:resolveTableName {} {}",resolveTableName.getDb(),resolveTableName.getTbl());
+                LOG.info("resolveTableRef:tableRelation {}" tableRelation.getName().getTbl())
                 Table table = resolveTable(tableRelation);
                 Relation r;
                 if (table instanceof View) {
