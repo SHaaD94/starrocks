@@ -4470,7 +4470,7 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
         // Regenerate cteID when generating plan
         return new CTERelation(
                 RelationId.of(queryRelation).hashCode(),
-                ((Identifier) visit(context.name)).getValue().toLowerCase(),
+                ((Identifier) visit(context.name)).getValue(),
                 getColumnNames(context.columnAliases()),
                 new QueryStatement(queryRelation),
                 queryRelation.getPos());

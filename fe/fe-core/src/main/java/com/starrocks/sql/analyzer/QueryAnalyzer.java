@@ -158,6 +158,10 @@ public class QueryAnalyzer {
                 return cteScope;
             }
 
+            if (ConnectContext.get() != null) {
+                ConnectContext.get().setRelationAliasCaseInSensitive(true);
+            }
+
             for (CTERelation withQuery : stmt.getCteRelations()) {
                 QueryRelation query = withQuery.getCteQueryStatement().getQueryRelation();
                 process(withQuery.getCteQueryStatement(), cteScope);
