@@ -343,8 +343,8 @@ public class QueryAnalyzer {
                             resolveTableName.getDb(),
                             resolveTableName.getTbl()));
                 }
-                LOG.info("resolveTableRef:resolveTableName {} {}",resolveTableName.getDb(),resolveTableName.getTbl());
-                LOG.info("resolveTableRef:tableRelation {}",tableRelation.getName().getTbl());
+                LOG.info("resolveTableRef:resolveTableName {} {}", resolveTableName.getDb(),resolveTableName.getTbl());
+                LOG.info("resolveTableRef:tableRelation {}", tableRelation.getName().getTbl());
                 Table table = resolveTable(tableRelation);
                 Relation r;
                 if (table instanceof View) {
