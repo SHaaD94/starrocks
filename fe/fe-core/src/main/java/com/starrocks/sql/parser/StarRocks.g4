@@ -2166,8 +2166,7 @@ expressionList
 booleanExpression
     : predicate                                                                           #booleanExpressionDefault
     | booleanExpression IS NOT? NULL                                                      #isNull
-    | booleanExpression IS TRUE                                                           #isTrue
-    | booleanExpression IS FALSE                                                          #isFalse
+    | booleanExpression IS booleanValue                                                   #isBool
     | left = booleanExpression comparisonOperator right = predicate                       #comparison
     | booleanExpression comparisonOperator '(' queryRelation ')'                          #scalarSubquery
     ;
