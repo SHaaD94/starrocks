@@ -301,8 +301,10 @@ public class QueryAnalyzer {
             } else if (relation instanceof TableRelation) {
                 TableRelation tableRelation = (TableRelation) relation;
                 TableName tableName = tableRelation.getName();
+                LOG.info("resolveTableRef:TableRelation {} {}", tableName.getDb(), tableName.getTbl())
                 if (tableName != null && Strings.isNullOrEmpty(tableName.getDb())) {
                     Optional<CTERelation> withQuery = scope.getCteQueries(tableName.getTbl());
+                    LOG.info("resolveTableRef:withQuery {}", withQuery.isPresent())
                     if (withQuery.isPresent()) {
                         CTERelation withRelation = withQuery.get();
                         withRelation.addTableRef();
@@ -343,8 +345,7 @@ public class QueryAnalyzer {
                             resolveTableName.getDb(),
                             resolveTableName.getTbl()));
                 }
-                LOG.info("resolveTableRef:resolveTableName {} {}", resolveTableName.getDb(), resolveTableName.getTbl());
-                LOG.info("resolveTableRef:tableRelation {}", tableRelation.getName().getTbl());
+
                 Table table = resolveTable(tableRelation);
                 Relation r;
                 if (table instanceof View) {
