@@ -5821,8 +5821,7 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
 
     @Override
     public ParseNode visitIsBool(StarRocksParser.IsBoolContext context) {
-        return new BinaryPredicate(BinaryType.EQ, (Expr) visit(context.left),
-                (Expr) visit(context.right), createPos(context));
+        return new BinaryPredicate(BinaryType.EQ, (Expr) visit(context.left), (Expr) visit(context.right), createPos(context));
     }
 
     @Override
