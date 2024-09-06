@@ -1103,8 +1103,7 @@ public class StmtExecutor {
             context.getState().setError(errorMsg == null ? ErrorCode.ERR_UNKNOWN_ERROR.formatErrorMsg() : errorMsg);
             return;
         }
-        ConnectContext killCtx =
-                ConnectContext killCtx = ExecuteEnv.getInstance().getScheduler().getContext(connectionId);
+        ConnectContext killCtx  = ExecuteEnv.getInstance().getScheduler().getContext(connectionId);
         if (killCtx == null) {
             ErrorReport.reportDdlException(ErrorCode.ERR_NO_SUCH_THREAD, connectionId);
         }
