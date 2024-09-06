@@ -1000,11 +1000,15 @@ public class StmtExecutor {
             handleKillQuery(killStmt.getQueryId());
         } else {
             long id = killStmt.getConnectionId();
-            ConnectContext killCtx = context.getConnectScheduler().getContext(id);
-            if (killCtx == null) {
-                ErrorReport.reportDdlException(ErrorCode.ERR_NO_SUCH_THREAD, id);
+            if (killStmt.isConnectionKill()) {
+                handleKillConnection(id);
+            } else {
+                ConnectContext killCtx = context.getConnectScheduler().getContext(id);
+                if (killCtx == null) {
+                    ErrorReport.reportDdlException(ErrorCode.ERR_NO_SUCH_THREAD, id);
+                }
+                handleKill(killCtx, killStmt.isConnectionKill());
             }
-            handleKill(killCtx, killStmt.isConnectionKill());
         }
     }
 
@@ -1067,6 +1071,44 @@ public class StmtExecutor {
             ErrorReport.reportDdlException(ErrorCode.ERR_NO_SUCH_QUERY, queryId);
         }
         handleKill(killCtx, false);
+    }
+
+    private void handleKillConnection(long connectionId) throws DdlException {
+        // > 0 means it is forwarded from other fe
+        if (context.getForwardTimes() == 0) {
+            String errorMsg = null;
+            // forward to all fe
+            for (Frontend fe : GlobalStateMgr.getCurrentState().getNodeMgr().getFrontends(null /* all */)) {
+                LeaderOpExecutor leaderOpExecutor =
+                        new LeaderOpExecutor(Pair.create(fe.getHost(), fe.getRpcPort()), parsedStmt, originStmt,
+                                context, redirectStatus);
+                try {
+                    leaderOpExecutor.execute();
+                    // if connection is successfully killed by this fe, it can return now
+                    if (context.getState().getStateType() == MysqlStateType.OK) {
+                        context.getState().setOk();
+                        return;
+                    }
+                    errorMsg = context.getState().getErrorMessage();
+                } catch (TTransportException e) {
+                    errorMsg = "Failed to connect to fe " + fe.getHost() + ":" + fe.getRpcPort();
+                    LOG.warn(errorMsg, e);
+                } catch (Exception e) {
+                    errorMsg = "Failed to connect to fe " + fe.getHost() + ":" + fe.getRpcPort() + " due to " +
+                            e.getMessage();
+                    LOG.warn(e.getMessage(), e);
+                }
+            }
+            // if the connectionId is not found in any fe, print the error message
+            context.getState().setError(errorMsg == null ? ErrorCode.ERR_UNKNOWN_ERROR.formatErrorMsg() : errorMsg);
+            return;
+        }
+        ConnectContext killCtx =
+                ConnectContext killCtx = ExecuteEnv.getInstance().getScheduler().getContext(connectionId);
+        if (killCtx == null) {
+            ErrorReport.reportDdlException(ErrorCode.ERR_NO_SUCH_THREAD, connectionId);
+        }
+        handleKill(killCtx, true);
     }
 
     // Process set statement.
