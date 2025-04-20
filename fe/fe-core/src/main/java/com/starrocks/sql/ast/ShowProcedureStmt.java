@@ -49,7 +49,7 @@ public class ShowProcedureStmt extends ShowStmt {
     public ShowProcedureStmt(String pattern, Expr where, NodePosition pos) {
         super(pos);
         this.pattern = pattern;
-        this.predicate = (Predicate) where;
+        this.where = (Predicate) where;
     }
 
     public ShowProcedureStmt() {

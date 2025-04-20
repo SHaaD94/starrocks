@@ -2999,12 +2999,12 @@ public class ShowExecutor {
         private List<List<String>> doPredicate(ShowStmt showStmt,
                                                ShowResultSetMetaData showResultSetMetaData,
                                                List<List<String>> rows) {
-            Predicate predicate = showStmt.getPredicate();
-            if (predicate == null) {
+            Predicate where = showStmt.getWhere();
+            if (where == null) {
                 return rows;
             }
 
-            List<Expr> conjuncts = AnalyzerUtils.extractConjuncts(predicate);
+            List<Expr> conjuncts = AnalyzerUtils.extractConjuncts(where);
             if (conjuncts.isEmpty()) {
                 return rows;
             }

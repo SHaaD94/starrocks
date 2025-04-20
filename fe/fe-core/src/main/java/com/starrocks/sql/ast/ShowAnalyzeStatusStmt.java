@@ -45,7 +45,7 @@ public class ShowAnalyzeStatusStmt extends ShowStmt {
     public ShowAnalyzeStatusStmt(Predicate predicate, List<OrderByElement> orderByElements,
                                  LimitElement limitElement, NodePosition pos) {
         super(pos);
-        this.predicate = predicate;
+        this.where = predicate;
         this.limitElement = limitElement;
         this.orderByElements = orderByElements;
     }

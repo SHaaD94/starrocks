@@ -2602,7 +2602,7 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
         Token stop = context.qualifiedName().stop;
         QualifiedName qualifiedName = getQualifiedName(context.qualifiedName());
         TableName targetTableName = qualifiedNameToTableName(qualifiedName);
-        Expr where = context.where != null ? (Expr) visit(context.where) : null;
+        Predicate where = context.where != null ? (Expr) visit(context.where) : null;
         PartitionNames partitionNames = null;
         if (context.partitionNames() != null) {
             stop = context.partitionNames().stop;
@@ -2896,9 +2896,9 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
 
     @Override
     public ParseNode visitShowStatsMetaStatement(StarRocksParser.ShowStatsMetaStatementContext context) {
-        Predicate predicate = null;
+        Expr predicate = null;
         if (context.expression() != null) {
-            predicate = (Predicate) visit(context.expression());
+            predicate = (Expr) visit(context.expression());
         }
 
         List<OrderByElement> orderByElements = null;

@@ -15,7 +15,7 @@
 
 package com.starrocks.sql.ast;
 
-import com.starrocks.analysis.Expr;
+import com.starrocks.analysis.Predicate;
 import com.starrocks.catalog.Column;
 import com.starrocks.catalog.ScalarType;
 import com.starrocks.qe.ShowResultSetMetaData;
@@ -42,13 +42,12 @@ public class ShowCharsetStmt extends ShowStmt {
                     .build();
 
     private String pattern;
-    private Expr where;
 
     public ShowCharsetStmt() {
         super(NodePosition.ZERO);
     }
 
-    public ShowCharsetStmt(String pattern, Expr where, NodePosition pos) {
+    public ShowCharsetStmt(String pattern, Predicate where, NodePosition pos) {
         super(pos);
         this.pattern = pattern;
         this.where = where;
@@ -56,10 +55,6 @@ public class ShowCharsetStmt extends ShowStmt {
 
     public String getPattern() {
         return pattern;
-    }
-
-    public Expr getWhere() {
-        return where;
     }
 
     @Override

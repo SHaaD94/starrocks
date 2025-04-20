@@ -41,7 +41,7 @@ public class ShowAnalyzeJobStmt extends ShowStmt {
     public ShowAnalyzeJobStmt(Predicate predicate, List<OrderByElement> orderByElements,
                               LimitElement limitElement, NodePosition pos) {
         super(pos);
-        this.predicate = predicate;
+        this.where = predicate;
         this.orderByElements = orderByElements;
         this.limitElement = limitElement;
     }

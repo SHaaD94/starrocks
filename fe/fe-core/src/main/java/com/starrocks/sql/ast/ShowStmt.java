@@ -27,7 +27,7 @@ import com.starrocks.sql.parser.NodePosition;
 import java.util.List;
 
 public abstract class ShowStmt extends StatementBase {
-    protected Predicate predicate;
+    protected Predicate where;
     protected LimitElement limitElement;
     protected List<OrderByElement> orderByElements;
     protected List<OrderByPair> orderByPairs;
@@ -36,12 +36,8 @@ public abstract class ShowStmt extends StatementBase {
         super(pos);
     }
 
-    public void setPredicate(Predicate predicate) {
-        this.predicate = predicate;
-    }
-
-    public Predicate getPredicate() {
-        return predicate;
+    public void setWhere(Predicate where) {
+        this.where = where;
     }
 
     public abstract ShowResultSetMetaData getMetaData();
@@ -60,6 +56,10 @@ public abstract class ShowStmt extends StatementBase {
 
     public void setOrderByPairs(List<OrderByPair> orderByPairs) {
         this.orderByPairs = orderByPairs;
+    }
+
+    public Predicate getWhere() {
+        return where;
     }
 
     public LimitElement getLimitElement() {

@@ -558,12 +558,12 @@ public class ShowStmtAnalyzer {
         }
 
         private void analyzeShowPredicate(ShowStmt showStmt) {
-            Predicate predicate = showStmt.getPredicate();
-            if (predicate == null) {
+            Predicate where = showStmt.getWhere();
+            if (where == null) {
                 return;
             }
 
-            List<Expr> exprs = AnalyzerUtils.extractConjuncts(predicate);
+            List<Expr> exprs = AnalyzerUtils.extractConjuncts(where);
             for (Expr expr : exprs) {
                 if (!(expr instanceof BinaryPredicate && ((BinaryPredicate) expr).getOp().isEquivalence()) &&
                         !(expr instanceof LikePredicate)) {

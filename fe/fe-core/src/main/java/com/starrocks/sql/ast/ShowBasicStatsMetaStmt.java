@@ -43,7 +43,7 @@ public class ShowBasicStatsMetaStmt extends ShowStmt {
     public ShowBasicStatsMetaStmt(Predicate predicate, List<OrderByElement> orderByElements,
                                   LimitElement limitElement, NodePosition pos) {
         super(pos);
-        this.predicate = predicate;
+        this.where = predicate;
         this.limitElement = limitElement;
         this.orderByElements = orderByElements;
     }

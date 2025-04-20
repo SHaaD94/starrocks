@@ -39,7 +39,6 @@ public class AdminShowReplicaStatusStmt extends ShowStmt {
             .build();
 
     private final TableRef tblRef;
-    private final Expr where;
     private List<String> partitions = Lists.newArrayList();
 
     private BinaryType op;
