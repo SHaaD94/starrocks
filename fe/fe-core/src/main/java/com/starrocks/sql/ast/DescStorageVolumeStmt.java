@@ -14,6 +14,7 @@
 
 package com.starrocks.sql.ast;
 
+import com.starrocks.analysis.Expr;
 import com.starrocks.catalog.Column;
 import com.starrocks.catalog.ScalarType;
 import com.starrocks.common.AnalysisException;
@@ -38,8 +39,8 @@ public class DescStorageVolumeStmt extends ShowStmt {
                     .addColumn(new Column("Comment", ScalarType.createVarchar(20)))
                     .build();
 
-    public DescStorageVolumeStmt(String storageVolumeName, NodePosition pos) {
-        super(pos);
+    public DescStorageVolumeStmt(String storageVolumeName, NodePosition pos, Expr where) {
+        super(pos, where);
         this.storageVolumeName = storageVolumeName;
         this.node = new StorageVolumeProcNode(storageVolumeName);
     }

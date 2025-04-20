@@ -557,7 +557,7 @@ public class ShowStmtAnalyzer {
         }
 
         private void analyzeShowPredicate(ShowStmt showStmt) {
-            Expr where = showStmt.getWhere();
+            Expr where = showStmt.getWhereClause();
             if (where == null) {
                 return;
             }

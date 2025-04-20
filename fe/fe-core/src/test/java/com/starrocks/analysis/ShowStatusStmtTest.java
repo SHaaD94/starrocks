@@ -35,7 +35,7 @@ public class ShowStatusStmtTest {
             ShowStatusStmt stmt = (ShowStatusStmt) SqlParser.parse("SHOW STATUS", 32).get(0);
             Analyzer.analyze(stmt, ctx);
             Assert.assertNull(stmt.getPattern());
-            Assert.assertNull(stmt.getWhere());
+            Assert.assertNull(stmt.getWhereClause());
         }
 
         {
@@ -43,14 +43,14 @@ public class ShowStatusStmtTest {
             Analyzer.analyze(stmt, ctx);
             Assert.assertEquals(SetType.GLOBAL, stmt.getType());
             Assert.assertNull(stmt.getPattern());
-            Assert.assertNull(stmt.getWhere());
+            Assert.assertNull(stmt.getWhereClause());
         }
 
         {
             ShowStatusStmt stmt = (ShowStatusStmt) SqlParser.parse("SHOW LOCAL STATUS", 32).get(0);
             Analyzer.analyze(stmt, ctx);
             Assert.assertNull(stmt.getPattern());
-            Assert.assertNull(stmt.getWhere());
+            Assert.assertNull(stmt.getWhereClause());
         }
 
         {
@@ -58,7 +58,7 @@ public class ShowStatusStmtTest {
             Analyzer.analyze(stmt, ctx);
             Assert.assertEquals(SetType.SESSION, stmt.getType());
             Assert.assertNull(stmt.getPattern());
-            Assert.assertNull(stmt.getWhere());
+            Assert.assertNull(stmt.getWhereClause());
         }
 
         {
@@ -66,13 +66,13 @@ public class ShowStatusStmtTest {
             Analyzer.analyze(stmt, ctx);
             Assert.assertNotNull(stmt.getPattern());
             Assert.assertEquals("abc", stmt.getPattern());
-            Assert.assertNull(stmt.getWhere());
+            Assert.assertNull(stmt.getWhereClause());
         }
 
         {
             ShowStatusStmt stmt = (ShowStatusStmt) SqlParser.parse("SHOW STATUS where abc=123", 32).get(0);
             Assert.assertNull(stmt.getPattern());
-            Assert.assertEquals("abc = 123", stmt.getWhere().toSql());
+            Assert.assertEquals("abc = 123", stmt.getWhereClause().toSql());
         }
 
         {
@@ -80,7 +80,7 @@ public class ShowStatusStmtTest {
             Assert.assertNotNull(stmt.getType());
             Assert.assertEquals(SetType.SESSION, stmt.getType());
             Assert.assertNull(stmt.getPattern());
-            Assert.assertNull(stmt.getWhere());
+            Assert.assertNull(stmt.getWhereClause());
         }
     }
 }

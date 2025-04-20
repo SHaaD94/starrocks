@@ -595,7 +595,7 @@ showAlterStatement
     ;
 
 descTableStatement
-    : (DESC | DESCRIBE) ((table=qualifiedName ALL?) | (FILES propertyList))
+    : (DESC | DESCRIBE) ((table=qualifiedName ALL?) | (FILES propertyList)) (WHERE where=expression)?
     ;
 
 createTableLikeStatement
@@ -856,7 +856,7 @@ modifyStorageVolumeCommentClause
     ;
 
 descStorageVolumeStatement
-    : (DESC | DESCRIBE) STORAGE VOLUME identifierOrString
+    : (DESC | DESCRIBE) STORAGE VOLUME identifierOrString (WHERE where=expression)?
     ;
 
 setDefaultStorageVolumeStatement
@@ -2039,7 +2039,7 @@ alterPipeStatement
     ;
 
 descPipeStatement
-    : (DESC | DESCRIBE) PIPE qualifiedName
+    : (DESC | DESCRIBE) PIPE qualifiedName (WHERE where=expression)?
     ;
 
 showPipeStatement

@@ -1408,14 +1408,18 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
 
     @Override
     public ParseNode visitDescTableStatement(StarRocksParser.DescTableStatementContext context) {
+        Expr where = null;
+        if (context.where != null) {
+            where = (Expr) visit(context.where);
+        }
         if (context.qualifiedName() != null) {
             QualifiedName qualifiedName = getQualifiedName(context.qualifiedName());
             TableName targetTableName = qualifiedNameToTableName(qualifiedName);
-            return new DescribeStmt(targetTableName, context.ALL() != null, createPos(context));
+            return new DescribeStmt(targetTableName, context.ALL() != null, createPos(context), where);
         }
 
         Map<String, String> tableFunctionProperties = getPropertyList(context.propertyList());
-        return new DescribeStmt(tableFunctionProperties, createPos(context));
+        return new DescribeStmt(tableFunctionProperties, createPos(context), where);
     }
 
     @Override
@@ -2576,11 +2580,17 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
     @Override
     public ParseNode visitAdminShowConfigStatement(StarRocksParser.AdminShowConfigStatementContext context) {
         NodePosition pos = createPos(context);
+
+        Expr where = null;
+        if (context.WHERE() != null) {
+            where = (Expr) visit(context.WHERE());
+        }
+
         if (context.pattern != null) {
             StringLiteral stringLiteral = (StringLiteral) visit(context.pattern);
-            return new AdminShowConfigStmt(AdminSetConfigStmt.ConfigType.FRONTEND, stringLiteral.getValue(), pos);
+            return new AdminShowConfigStmt(AdminSetConfigStmt.ConfigType.FRONTEND, stringLiteral.getValue(), pos, where);
         }
-        return new AdminShowConfigStmt(AdminSetConfigStmt.ConfigType.FRONTEND, null, pos);
+        return new AdminShowConfigStmt(AdminSetConfigStmt.ConfigType.FRONTEND, null, pos, where);
     }
 
     @Override
@@ -2595,9 +2605,14 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
             stop = context.partitionNames().stop;
             partitionNames = (PartitionNames) visit(context.partitionNames());
         }
+        Expr where = null;
+        if (context.where != null) {
+            where = (Expr) visit(context.where);
+        }
+
         return new AdminShowReplicaDistributionStmt(new TableRef(targetTableName, null,
                 partitionNames, createPos(start, stop)),
-                createPos(context));
+                createPos(context), where);
     }
 
     @Override
@@ -4340,7 +4355,13 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
     public ParseNode visitDescStorageVolumeStatement(StarRocksParser.DescStorageVolumeStatementContext context) {
         Identifier identifier = (Identifier) visit(context.identifierOrString());
         String svName = identifier.getValue();
-        return new DescStorageVolumeStmt(svName, createPos(context));
+
+        Expr where = null;
+        if (context.where != null) {
+            where = (Expr) visit(context.where);
+        }
+
+        return new DescStorageVolumeStmt(svName, createPos(context), where);
     }
 
     @Override
@@ -5170,7 +5191,13 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
     @Override
     public ParseNode visitDescPipeStatement(StarRocksParser.DescPipeStatementContext context) {
         PipeName pipeName = resolvePipeName(context.qualifiedName());
-        return new DescPipeStmt(createPos(context), pipeName);
+
+        Expr where = null;
+        if (context.where != null) {
+            where = (Expr) visit(context.where);
+        }
+
+        return new DescPipeStmt(createPos(context), pipeName, where);
     }
 
     @Override

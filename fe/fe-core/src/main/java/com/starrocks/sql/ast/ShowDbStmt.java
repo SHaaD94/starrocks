@@ -34,7 +34,6 @@ public class ShowDbStmt extends ShowStmt {
                     .addColumn(new Column(DB_COL, ScalarType.createVarchar(20)))
                     .build();
     private final String pattern;
-    private Expr where;
 
     private String catalogName;
 

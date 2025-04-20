@@ -144,7 +144,7 @@ public class AdminStmtAnalyzer {
             }
 
             if (!analyzeWhere(adminShowReplicaStatusStmt)) {
-                Expr where = adminShowReplicaStatusStmt.getWhere();
+                Expr where = adminShowReplicaStatusStmt.getWhereClause();
                 throw new SemanticException(PARSER_ERROR_MSG.invalidWhereExpr("status =|!= " +
                         "'OK'|'DEAD'|'VERSION_ERROR'|'SCHEMA_ERROR'|'MISSING'"),
                         where.getPos());
@@ -232,7 +232,7 @@ public class AdminStmtAnalyzer {
         }
 
         private boolean analyzeWhere(AdminShowReplicaStatusStmt adminShowReplicaStatusStmt) {
-            Expr where = adminShowReplicaStatusStmt.getWhere();
+            Expr where = adminShowReplicaStatusStmt.getWhereClause();
             Replica.ReplicaStatus statusFilter = null;
 
             // analyze where clause if not null

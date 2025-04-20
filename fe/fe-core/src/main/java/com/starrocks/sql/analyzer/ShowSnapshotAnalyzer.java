@@ -52,7 +52,7 @@ public class ShowSnapshotAnalyzer {
                         "Repository [" + repoName + "] does not exist");
             }
 
-            Expr where = showSnapshotStmt.getWhere();
+            Expr where = showSnapshotStmt.getWhereClause();
             if (where != null) {
                 boolean ok = true;
                 CHECK:

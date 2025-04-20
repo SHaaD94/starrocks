@@ -484,7 +484,9 @@ public class ShowExecutor {
                 rows.add(Lists.newArrayList(dbName));
             }
 
-            return new ShowResultSet(((ShowDbStmt) statement).getMetaData(), rows);
+            rows = doPredicate(statement, statement.getMetaData(), rows);
+
+            return new ShowResultSet(statement.getMetaData(), rows);
         }
 
         public ShowResultSet visitShowTableStatement(ShowTableStmt statement, ConnectContext context) {
@@ -678,7 +680,9 @@ public class ShowExecutor {
         @Override
         public ShowResultSet visitDescTableStmt(DescribeStmt statement, ConnectContext context) {
             try {
-                return new ShowResultSet(statement.getMetaData(), statement.getResultRows());
+                List<List<String>> rows = statement.getResultRows();
+                rows = doPredicate(statement, statement.getMetaData(), rows);
+                return new ShowResultSet(statement.getMetaData(), rows);
             } catch (AnalysisException e) {
                 throw new SemanticException(e.getMessage());
             }
@@ -2243,6 +2247,7 @@ public class ShowExecutor {
             } catch (DdlException e) {
                 throw new SemanticException(e.getMessage());
             }
+            results = doPredicate(statement, statement.getMetaData(), results);
             return new ShowResultSet(statement.getMetaData(), results);
         }
 
@@ -2255,6 +2260,7 @@ public class ShowExecutor {
             } catch (DdlException e) {
                 throw new SemanticException(e.getMessage());
             }
+            results = doPredicate(statement, statement.getMetaData(), results);
             return new ShowResultSet(statement.getMetaData(), results);
         }
 
@@ -2273,6 +2279,7 @@ public class ShowExecutor {
             } catch (DdlException e) {
                 throw new SemanticException(e.getMessage());
             }
+            results = doPredicate(statement, statement.getMetaData(), results);
             return new ShowResultSet(statement.getMetaData(), results);
         }
 
@@ -2744,7 +2751,9 @@ public class ShowExecutor {
         @Override
         public ShowResultSet visitDescStorageVolumeStatement(DescStorageVolumeStmt statement, ConnectContext context) {
             try {
-                return new ShowResultSet(statement.getMetaData(), statement.getResultRows());
+                List<List<String>> rows = statement.getResultRows();
+                rows = doPredicate(statement, statement.getMetaData(), rows);
+                return new ShowResultSet(statement.getMetaData(), rows);
             } catch (AnalysisException e) {
                 throw new SemanticException(e.getMessage());
             }
@@ -2818,6 +2827,7 @@ public class ShowExecutor {
             List<String> row = Lists.newArrayList();
             DescPipeStmt.handleDesc(row, pipe);
             rows.add(row);
+            rows = doPredicate(statement, statement.getMetaData(), rows);
             return new ShowResultSet(statement.getMetaData(), rows);
         }
 
@@ -2998,7 +3008,7 @@ public class ShowExecutor {
         private List<List<String>> doPredicate(ShowStmt showStmt,
                                                ShowResultSetMetaData showResultSetMetaData,
                                                List<List<String>> rows) {
-            Expr where = showStmt.getWhere();
+            Expr where = showStmt.getWhereClause();
             if (where == null) {
                 return rows;
             }

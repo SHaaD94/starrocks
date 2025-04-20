@@ -17,6 +17,7 @@
 
 package com.starrocks.sql.ast;
 
+import com.starrocks.analysis.Expr;
 import com.starrocks.catalog.Column;
 import com.starrocks.catalog.ScalarType;
 import com.starrocks.qe.ShowResultSetMetaData;
@@ -47,7 +48,7 @@ public class HelpStmt extends ShowStmt {
     }
 
     public HelpStmt(String mask, NodePosition pos) {
-        super(pos);
+        super(pos, null);
         this.mask = mask;
     }
 

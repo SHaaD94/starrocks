@@ -15,10 +15,7 @@
 package com.starrocks.sql.ast;
 
 import com.google.common.collect.Lists;
-import com.starrocks.analysis.LimitElement;
-import com.starrocks.analysis.OrderByElement;
-import com.starrocks.analysis.Predicate;
-import com.starrocks.analysis.RedirectStatus;
+import com.starrocks.analysis.*;
 import com.starrocks.authorization.AccessDeniedException;
 import com.starrocks.catalog.Column;
 import com.starrocks.catalog.Database;
@@ -38,10 +35,9 @@ import java.util.List;
 
 public class ShowAnalyzeJobStmt extends ShowStmt {
 
-    public ShowAnalyzeJobStmt(Predicate predicate, List<OrderByElement> orderByElements,
+    public ShowAnalyzeJobStmt(Predicate where, List<OrderByElement> orderByElements,
                               LimitElement limitElement, NodePosition pos) {
-        super(pos);
-        this.where = predicate;
+        super(pos, where);
         this.orderByElements = orderByElements;
         this.limitElement = limitElement;
     }

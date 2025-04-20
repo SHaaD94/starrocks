@@ -45,9 +45,8 @@ public class AdminShowReplicaStatusStmt extends ShowStmt {
     private ReplicaStatus statusFilter;
 
     public AdminShowReplicaStatusStmt(TableRef tblRef, Expr where, NodePosition pos) {
-        super(pos);
+        super(pos, where);
         this.tblRef = tblRef;
-        this.where = where;
     }
 
     public TableRef getTblRef() {

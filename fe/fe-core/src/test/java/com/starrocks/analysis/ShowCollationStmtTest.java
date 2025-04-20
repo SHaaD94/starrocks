@@ -18,28 +18,28 @@ public class ShowCollationStmtTest {
             ShowCollationStmt stmt = (ShowCollationStmt) SqlParser.parse("SHOW COLLATION", 32).get(0);
             Analyzer.analyze(stmt, ctx);
             Assert.assertNull(stmt.getPattern());
-            Assert.assertNull(stmt.getWhere());
+            Assert.assertNull(stmt.getWhereClause());
         }
 
         {
             ShowCollationStmt stmt = (ShowCollationStmt) SqlParser.parse("SHOW COLLATION LIKE 'abc'", 32).get(0);
             Analyzer.analyze(stmt, ctx);
             Assert.assertEquals("abc", stmt.getPattern());
-            Assert.assertNull(stmt.getWhere());
+            Assert.assertNull(stmt.getWhereClause());
         }
 
         {
             ShowCollationStmt stmt = (ShowCollationStmt) SqlParser.parse("SHOW COLLATION WHERE Sortlen>1", 32).get(0);
             Analyzer.analyze(stmt, ctx);
             Assert.assertNull(stmt.getPattern());
-            Assert.assertEquals("Sortlen > 1", stmt.getWhere().toSql());
+            Assert.assertEquals("Sortlen > 1", stmt.getWhereClause().toSql());
         }
 
         {
             ShowCollationStmt stmt = new ShowCollationStmt();
             Analyzer.analyze(stmt, ctx);
             Assert.assertNull(stmt.getPattern());
-            Assert.assertNull(stmt.getWhere());
+            Assert.assertNull(stmt.getWhereClause());
         }
 
     }

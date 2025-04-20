@@ -42,10 +42,9 @@ import java.util.List;
 public class ShowAnalyzeStatusStmt extends ShowStmt {
     private static final Logger LOG = LogManager.getLogger(ShowAnalyzeStatusStmt.class);
 
-    public ShowAnalyzeStatusStmt(Predicate predicate, List<OrderByElement> orderByElements,
+    public ShowAnalyzeStatusStmt(Predicate where, List<OrderByElement> orderByElements,
                                  LimitElement limitElement, NodePosition pos) {
-        super(pos);
-        this.where = predicate;
+        super(pos, where);
         this.limitElement = limitElement;
         this.orderByElements = orderByElements;
     }

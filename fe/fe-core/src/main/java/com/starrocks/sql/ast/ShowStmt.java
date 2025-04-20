@@ -29,7 +29,7 @@ import java.util.List;
 
 public abstract class ShowStmt extends StatementBase {
     @Nullable
-    protected final Expr where;
+    protected Expr where;
     protected LimitElement limitElement;
     protected List<OrderByElement> orderByElements;
     protected List<OrderByPair> orderByPairs;
@@ -57,7 +57,7 @@ public abstract class ShowStmt extends StatementBase {
         this.orderByPairs = orderByPairs;
     }
 
-    public Expr getWhere() {
+    public Expr getWhereClause() {
         return where;
     }
 

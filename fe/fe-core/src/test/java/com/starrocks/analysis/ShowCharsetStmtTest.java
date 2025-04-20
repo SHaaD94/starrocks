@@ -33,35 +33,35 @@ public class ShowCharsetStmtTest  {
             ShowCharsetStmt stmt = (ShowCharsetStmt) SqlParser.parse("SHOW CHARSET", 32).get(0);
             Analyzer.analyze(stmt, ctx);
             Assert.assertNull(stmt.getPattern());
-            Assert.assertNull(stmt.getWhere());
+            Assert.assertNull(stmt.getWhereClause());
         }
 
         {
             ShowCharsetStmt stmt = (ShowCharsetStmt) SqlParser.parse("SHOW CHAR SET", 32).get(0);
             Analyzer.analyze(stmt, ctx);
             Assert.assertNull(stmt.getPattern());
-            Assert.assertNull(stmt.getWhere());
+            Assert.assertNull(stmt.getWhereClause());
         }
 
         {
             ShowCharsetStmt stmt = (ShowCharsetStmt) SqlParser.parse("SHOW CHARSET LIKE 'abc'", 32).get(0);
             Analyzer.analyze(stmt, ctx);
             Assert.assertEquals("abc", stmt.getPattern());
-            Assert.assertNull(stmt.getWhere());
+            Assert.assertNull(stmt.getWhereClause());
         }
 
         {
             ShowCharsetStmt stmt = (ShowCharsetStmt) SqlParser.parse("SHOW CHARSET WHERE Maxlen>1", 32).get(0);
             Analyzer.analyze(stmt, ctx);
             Assert.assertNull(stmt.getPattern());
-            Assert.assertEquals("Maxlen > 1", stmt.getWhere().toSql());
+            Assert.assertEquals("Maxlen > 1", stmt.getWhereClause().toSql());
         }
 
         {
             ShowCharsetStmt stmt = new ShowCharsetStmt();
             Analyzer.analyze(stmt, ctx);
             Assert.assertNull(stmt.getPattern());
-            Assert.assertNull(stmt.getWhere());
+            Assert.assertNull(stmt.getWhereClause());
         }
     }
 }

@@ -16,6 +16,7 @@
 package com.starrocks.sql.ast;
 
 import com.google.common.base.Preconditions;
+import com.starrocks.analysis.Expr;
 import com.starrocks.analysis.TableName;
 import com.starrocks.catalog.Column;
 import com.starrocks.catalog.ScalarType;
@@ -86,19 +87,15 @@ public class DescribeStmt extends ShowStmt {
     private boolean isTableFunctionTable = false;
     private Map<String, String> tableFunctionProperties = null;
 
-    public DescribeStmt(TableName dbTableName, boolean isAllTables) {
-        this(dbTableName, isAllTables, NodePosition.ZERO);
-    }
-
-    public DescribeStmt(TableName dbTableName, boolean isAllTables, NodePosition pos) {
-        super(pos);
+    public DescribeStmt(TableName dbTableName, boolean isAllTables, NodePosition pos, Expr where) {
+        super(pos, where);
         this.dbTableName = dbTableName;
         this.totalRows = new LinkedList<>();
         this.isAllTables = isAllTables;
     }
 
-    public DescribeStmt(Map<String, String> tableFunctionProperties, NodePosition pos) {
-        super(pos);
+    public DescribeStmt(Map<String, String> tableFunctionProperties, NodePosition pos, Expr where) {
+        super(pos, where);
         this.dbTableName = null;
         this.totalRows = new LinkedList<>();
         this.isTableFunctionTable = true;

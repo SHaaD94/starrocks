@@ -16,6 +16,7 @@
 package com.starrocks.sql.ast;
 
 import com.google.common.collect.ImmutableList;
+import com.starrocks.analysis.Expr;
 import com.starrocks.analysis.RedirectStatus;
 import com.starrocks.analysis.TableRef;
 import com.starrocks.catalog.Column;
@@ -31,12 +32,8 @@ public class AdminShowReplicaDistributionStmt extends ShowStmt {
 
     private final TableRef tblRef;
 
-    public AdminShowReplicaDistributionStmt(TableRef tblRef) {
-        this(tblRef, NodePosition.ZERO);
-    }
-
-    public AdminShowReplicaDistributionStmt(TableRef tblRef, NodePosition pos) {
-        super(pos);
+    public AdminShowReplicaDistributionStmt(TableRef tblRef, NodePosition pos, Expr where) {
+        super(pos, where);
         this.tblRef = tblRef;
     }
 

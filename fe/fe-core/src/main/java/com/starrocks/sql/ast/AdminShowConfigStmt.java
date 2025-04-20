@@ -16,6 +16,7 @@
 package com.starrocks.sql.ast;
 
 import com.google.common.collect.ImmutableList;
+import com.starrocks.analysis.Expr;
 import com.starrocks.catalog.Column;
 import com.starrocks.catalog.ScalarType;
 import com.starrocks.qe.ShowResultSetMetaData;
@@ -32,12 +33,8 @@ public class AdminShowConfigStmt extends ShowStmt {
 
     private final String pattern;
 
-    public AdminShowConfigStmt(ConfigType type, String pattern) {
-        this(type, pattern, NodePosition.ZERO);
-    }
-
-    public AdminShowConfigStmt(ConfigType type, String pattern, NodePosition pos) {
-        super(pos);
+    public AdminShowConfigStmt(ConfigType type, String pattern, NodePosition pos, Expr where) {
+        super(pos, where);
         this.type = type;
         this.pattern = pattern;
     }

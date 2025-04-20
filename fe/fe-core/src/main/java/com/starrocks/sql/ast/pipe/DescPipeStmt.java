@@ -14,6 +14,7 @@
 
 package com.starrocks.sql.ast.pipe;
 
+import com.starrocks.analysis.Expr;
 import com.starrocks.analysis.RedirectStatus;
 import com.starrocks.analysis.TableName;
 import com.starrocks.catalog.Column;
@@ -43,8 +44,8 @@ public class DescPipeStmt extends ShowStmt {
 
     private final PipeName name;
 
-    public DescPipeStmt(NodePosition pos, PipeName name) {
-        super(pos);
+    public DescPipeStmt(NodePosition pos, PipeName name, Expr where) {
+        super(pos, where);
         this.name = name;
     }
 

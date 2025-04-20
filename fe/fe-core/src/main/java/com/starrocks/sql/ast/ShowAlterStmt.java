@@ -48,7 +48,6 @@ public class ShowAlterStmt extends ShowStmt {
 
     private final AlterType type;
     private String dbName;
-    private final Expr whereClause;
     private HashMap<String, Expr> filterMap;
     private final List<OrderByElement> orderByElements;
     private ArrayList<OrderByPair> orderByPairs;
@@ -62,10 +61,9 @@ public class ShowAlterStmt extends ShowStmt {
 
     public ShowAlterStmt(AlterType type, String dbName, Expr whereClause, List<OrderByElement> orderByElements,
                          LimitElement limitElement, NodePosition pos) {
-        super(pos);
+        super(pos, whereClause);
         this.type = type;
         this.dbName = dbName;
-        this.whereClause = whereClause;
         this.orderByElements = orderByElements;
         this.limitElement = limitElement;
     }
