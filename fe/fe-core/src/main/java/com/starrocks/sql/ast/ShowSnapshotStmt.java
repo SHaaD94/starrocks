@@ -19,6 +19,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.starrocks.analysis.Expr;
+import com.starrocks.analysis.Predicate;
 import com.starrocks.catalog.Column;
 import com.starrocks.catalog.ScalarType;
 import com.starrocks.qe.ShowResultSetMetaData;
@@ -35,14 +36,9 @@ public class ShowSnapshotStmt extends ShowStmt {
             .build();
 
     private final String repoName;
-    private final Expr where;
     private String snapshotName;
     private String timestamp;
     private List<String> snapshotNames;
-
-    public ShowSnapshotStmt(String repoName, Expr where) {
-        this(repoName, where, NodePosition.ZERO);
-    }
 
     public ShowSnapshotStmt(String repoName, Expr where, NodePosition pos) {
         super(pos);
@@ -65,10 +61,6 @@ public class ShowSnapshotStmt extends ShowStmt {
 
     public String getTimestamp() {
         return timestamp;
-    }
-
-    public Expr getWhere() {
-        return where;
     }
 
     public void setSnapshotName(String snapshotName) {

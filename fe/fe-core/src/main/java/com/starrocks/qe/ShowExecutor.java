@@ -2999,7 +2999,7 @@ public class ShowExecutor {
         private List<List<String>> doPredicate(ShowStmt showStmt,
                                                ShowResultSetMetaData showResultSetMetaData,
                                                List<List<String>> rows) {
-            Predicate where = showStmt.getWhere();
+            Expr where = showStmt.getWhere();
             if (where == null) {
                 return rows;
             }

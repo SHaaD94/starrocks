@@ -16,6 +16,7 @@
 package com.starrocks.sql.ast;
 
 import com.starrocks.analysis.Expr;
+import com.starrocks.analysis.Predicate;
 import com.starrocks.catalog.Column;
 import com.starrocks.catalog.PrimitiveType;
 import com.starrocks.catalog.ScalarType;
@@ -40,7 +41,6 @@ public class ShowCollationStmt extends ShowStmt {
                     .build();
 
     private String pattern;
-    private Expr where;
 
     public ShowCollationStmt() {
         super(NodePosition.ZERO);
@@ -54,10 +54,6 @@ public class ShowCollationStmt extends ShowStmt {
 
     public String getPattern() {
         return pattern;
-    }
-
-    public Expr getWhere() {
-        return where;
     }
 
     @Override

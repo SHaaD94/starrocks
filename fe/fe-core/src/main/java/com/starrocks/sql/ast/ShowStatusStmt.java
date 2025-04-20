@@ -16,6 +16,7 @@
 package com.starrocks.sql.ast;
 
 import com.starrocks.analysis.Expr;
+import com.starrocks.analysis.Predicate;
 import com.starrocks.catalog.Column;
 import com.starrocks.catalog.ScalarType;
 import com.starrocks.qe.ShowResultSetMetaData;
@@ -40,7 +41,6 @@ public class ShowStatusStmt extends ShowStmt {
 
     private final SetType type;
     private String pattern;
-    private Expr where;
 
     public ShowStatusStmt() {
         this(SESSION, null, null, NodePosition.ZERO);
@@ -50,7 +50,6 @@ public class ShowStatusStmt extends ShowStmt {
         super(pos);
         this.type = type;
         this.pattern = pattern;
-        this.where = where;
     }
 
     public SetType getType() {
@@ -59,10 +58,6 @@ public class ShowStatusStmt extends ShowStmt {
 
     public String getPattern() {
         return pattern;
-    }
-
-    public Expr getWhere() {
-        return where;
     }
 
     @Override

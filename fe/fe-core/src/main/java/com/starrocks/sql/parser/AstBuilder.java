@@ -2602,7 +2602,7 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
         Token stop = context.qualifiedName().stop;
         QualifiedName qualifiedName = getQualifiedName(context.qualifiedName());
         TableName targetTableName = qualifiedNameToTableName(qualifiedName);
-        Predicate where = context.where != null ? (Expr) visit(context.where) : null;
+        Expr where = context.where != null ? (Predicate) visit(context.where) : null;
         PartitionNames partitionNames = null;
         if (context.partitionNames() != null) {
             stop = context.partitionNames().stop;
@@ -2896,9 +2896,9 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
 
     @Override
     public ParseNode visitShowStatsMetaStatement(StarRocksParser.ShowStatsMetaStatementContext context) {
-        Expr predicate = null;
+        Predicate predicate = null;
         if (context.expression() != null) {
-            predicate = (Expr) visit(context.expression());
+            predicate = (Predicate) visit(context.expression());
         }
 
         List<OrderByElement> orderByElements = null;
@@ -3375,7 +3375,7 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
 
         Expr where = null;
         if (context.expression() != null) {
-            where = (Expr) visit(context.expression());
+            where = (Predicate) visit(context.expression());
         }
 
         return new ShowCharsetStmt(pattern, where, createPos(context));
@@ -3391,7 +3391,7 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
 
         Expr where = null;
         if (context.expression() != null) {
-            where = (Expr) visit(context.expression());
+            where = (Predicate) visit(context.expression());
         }
 
         return new ShowCollationStmt(pattern, where, createPos(context));
@@ -3525,7 +3525,7 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
 
         Expr where = null;
         if (context.expression() != null) {
-            where = (Expr) visit(context.expression());
+            where = (Predicate) visit(context.expression());
         }
 
         return new ShowStatusStmt(getVariableType(context.varType()), pattern, where, createPos(context));
@@ -5155,7 +5155,7 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
             StringLiteral stringLiteral = (StringLiteral) visit(context.pattern);
             return new ShowPipeStmt(dbName, stringLiteral.getValue(), null, orderBy, limit, createPos(context));
         } else if (context.WHERE() != null) {
-            return new ShowPipeStmt(dbName, null, (Expr) visit(context.expression()), orderBy, limit,
+            return new ShowPipeStmt(dbName, null, (Predicate) visit(context.expression()), orderBy, limit,
                     createPos(context));
         } else {
             return new ShowPipeStmt(dbName, null, null, orderBy, limit, createPos(context));

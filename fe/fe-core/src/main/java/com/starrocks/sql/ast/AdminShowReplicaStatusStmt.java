@@ -44,10 +44,6 @@ public class AdminShowReplicaStatusStmt extends ShowStmt {
     private BinaryType op;
     private ReplicaStatus statusFilter;
 
-    public AdminShowReplicaStatusStmt(TableRef tblRef, Expr where) {
-        this(tblRef, where, NodePosition.ZERO);
-    }
-
     public AdminShowReplicaStatusStmt(TableRef tblRef, Expr where, NodePosition pos) {
         super(pos);
         this.tblRef = tblRef;
@@ -92,10 +88,6 @@ public class AdminShowReplicaStatusStmt extends ShowStmt {
 
     public void setStatusFilter(ReplicaStatus statusFilter) {
         this.statusFilter = statusFilter;
-    }
-
-    public Expr getWhere() {
-        return where;
     }
 
     @Override

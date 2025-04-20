@@ -14,11 +14,7 @@
 
 package com.starrocks.sql.ast.pipe;
 
-import com.starrocks.analysis.Expr;
-import com.starrocks.analysis.LimitElement;
-import com.starrocks.analysis.OrderByElement;
-import com.starrocks.analysis.RedirectStatus;
-import com.starrocks.analysis.TableName;
+import com.starrocks.analysis.*;
 import com.starrocks.catalog.Column;
 import com.starrocks.catalog.Database;
 import com.starrocks.catalog.ScalarType;
@@ -50,7 +46,6 @@ public class ShowPipeStmt extends ShowStmt {
 
     private String dbName;
     private final String like;
-    private final Expr where;
     private final List<OrderByElement> orderBy;
     private final LimitElement limit;
     private List<OrderByPair> orderByPairs;
@@ -60,7 +55,6 @@ public class ShowPipeStmt extends ShowStmt {
         super(pos);
         this.dbName = dbName;
         this.like = like;
-        this.where = where;
         this.orderBy = orderBy;
         this.limit = limit;
     }
@@ -94,10 +88,6 @@ public class ShowPipeStmt extends ShowStmt {
 
     public String getLike() {
         return like;
-    }
-
-    public Expr getWhere() {
-        return where;
     }
 
     public List<OrderByElement> getOrderBy() {

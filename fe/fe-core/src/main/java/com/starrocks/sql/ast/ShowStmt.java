@@ -15,10 +15,7 @@
 
 package com.starrocks.sql.ast;
 
-import com.starrocks.analysis.LimitElement;
-import com.starrocks.analysis.OrderByElement;
-import com.starrocks.analysis.Predicate;
-import com.starrocks.analysis.RedirectStatus;
+import com.starrocks.analysis.*;
 import com.starrocks.common.AnalysisException;
 import com.starrocks.common.util.OrderByPair;
 import com.starrocks.qe.ShowResultSetMetaData;
@@ -27,7 +24,7 @@ import com.starrocks.sql.parser.NodePosition;
 import java.util.List;
 
 public abstract class ShowStmt extends StatementBase {
-    protected Predicate where;
+    protected Expr where;
     protected LimitElement limitElement;
     protected List<OrderByElement> orderByElements;
     protected List<OrderByPair> orderByPairs;
@@ -36,7 +33,7 @@ public abstract class ShowStmt extends StatementBase {
         super(pos);
     }
 
-    public void setWhere(Predicate where) {
+    public void setWhere(Expr where) {
         this.where = where;
     }
 
@@ -58,7 +55,7 @@ public abstract class ShowStmt extends StatementBase {
         this.orderByPairs = orderByPairs;
     }
 
-    public Predicate getWhere() {
+    public Expr getWhere() {
         return where;
     }
 
