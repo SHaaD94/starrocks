@@ -47,7 +47,6 @@ public class ShowTabletStmt extends ShowStmt {
     private String tableName;
     private long tabletId;
     private PartitionNames partitionNames;
-    private Expr whereClause;
     private List<OrderByElement> orderByElements;
     private LimitElement limitElement;
 
@@ -189,10 +188,6 @@ public class ShowTabletStmt extends ShowStmt {
 
     public void setOrderByPairs(ArrayList<OrderByPair> orderByPairs) {
         this.orderByPairs = orderByPairs;
-    }
-
-    public Expr getWhereClause() {
-        return whereClause;
     }
 
     public List<OrderByElement> getOrderByElements() {

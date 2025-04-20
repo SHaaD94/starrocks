@@ -98,10 +98,6 @@ public class ShowAlterStmt extends ShowStmt {
         return this.node;
     }
 
-    public Expr getWhereClause() {
-        return whereClause;
-    }
-
     public List<OrderByElement> getOrderByElements() {
         return orderByElements;
     }

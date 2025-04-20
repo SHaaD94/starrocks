@@ -72,10 +72,6 @@ public class ShowLoadStmt extends ShowStmt {
         this.dbName = dbName;
     }
 
-    public Expr getWhereClause() {
-        return whereClause;
-    }
-
     public List<OrderByElement> getOrderByElements() {
         return orderByElements;
     }

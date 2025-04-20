@@ -19,7 +19,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.starrocks.analysis.Expr;
-import com.starrocks.analysis.Predicate;
 import com.starrocks.catalog.Column;
 import com.starrocks.catalog.ScalarType;
 import com.starrocks.qe.ShowResultSetMetaData;
@@ -41,9 +40,8 @@ public class ShowSnapshotStmt extends ShowStmt {
     private List<String> snapshotNames;
 
     public ShowSnapshotStmt(String repoName, Expr where, NodePosition pos) {
-        super(pos);
+        super(pos, where);
         this.repoName = repoName;
-        this.where = where;
         this.snapshotNames = Lists.newArrayList();
     }
 

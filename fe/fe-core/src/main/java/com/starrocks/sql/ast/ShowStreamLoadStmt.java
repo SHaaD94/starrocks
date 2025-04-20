@@ -94,7 +94,6 @@ public class ShowStreamLoadStmt extends ShowStmt {
     private final LabelName labelName;
     private boolean includeHistory = false;
     private StreamLoadFunctionalExprProvider functionalExprProvider;
-    private Expr whereClause;
     private List<OrderByElement> orderElements;
     private LimitElement limitElement;
 

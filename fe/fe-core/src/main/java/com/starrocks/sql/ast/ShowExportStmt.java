@@ -42,7 +42,6 @@ public class ShowExportStmt extends ShowStmt {
     private static final Logger LOG = LogManager.getLogger(ShowExportStmt.class);
 
     private String dbName;
-    private Expr whereClause;
     private LimitElement limitElement;
     private List<OrderByElement> orderByElements;
 
@@ -59,11 +58,10 @@ public class ShowExportStmt extends ShowStmt {
         this(db, whereExpr, orderByElements, limitElement, NodePosition.ZERO);
     }
 
-    public ShowExportStmt(String db, Expr whereExpr, List<OrderByElement> orderByElements,
+    public ShowExportStmt(String db, Expr where, List<OrderByElement> orderByElements,
                           LimitElement limitElement, NodePosition pos) {
-        super(pos);
+        super(pos, where);
         this.dbName = db;
-        this.whereClause = whereExpr;
         this.orderByElements = orderByElements;
         this.limitElement = limitElement;
     }
@@ -94,10 +92,6 @@ public class ShowExportStmt extends ShowStmt {
 
     public String getDbName() {
         return dbName;
-    }
-
-    public Expr getWhereClause() {
-        return whereClause;
     }
 
     public List<OrderByElement> getOrderByElements() {
@@ -138,8 +132,8 @@ public class ShowExportStmt extends ShowStmt {
             sb.append("FROM `").append(dbName).append("`");
         }
 
-        if (whereClause != null) {
-            sb.append(" WHERE ").append(whereClause.toSql());
+        if (where != null) {
+            sb.append(" WHERE ").append(where.toSql());
         }
 
         // Order By clause

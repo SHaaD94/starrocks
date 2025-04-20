@@ -14,7 +14,11 @@
 
 package com.starrocks.sql.ast.pipe;
 
-import com.starrocks.analysis.*;
+import com.starrocks.analysis.Expr;
+import com.starrocks.analysis.LimitElement;
+import com.starrocks.analysis.OrderByElement;
+import com.starrocks.analysis.RedirectStatus;
+import com.starrocks.analysis.TableName;
 import com.starrocks.catalog.Column;
 import com.starrocks.catalog.Database;
 import com.starrocks.catalog.ScalarType;

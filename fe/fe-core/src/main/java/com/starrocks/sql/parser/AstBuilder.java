@@ -743,7 +743,12 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
     @Override
     public ParseNode visitShowCreateDbStatement(StarRocksParser.ShowCreateDbStatementContext context) {
         String dbName = ((Identifier) visit(context.identifier())).getValue();
-        return new ShowCreateDbStmt(dbName, createPos(context));
+        Expr where = null;
+        if (context.where != null) {
+            where = (Expr) visit(context.where);
+        }
+
+        return new ShowCreateDbStmt(dbName, createPos(context), where);
     }
 
     @Override
@@ -2920,9 +2925,9 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
 
     @Override
     public ParseNode visitShowHistogramMetaStatement(StarRocksParser.ShowHistogramMetaStatementContext context) {
-        Predicate predicate = null;
-        if (context.expression() != null) {
-            predicate = (Predicate) visit(context.expression());
+        Expr where = null;
+        if (context.where != null) {
+            where = (Expr) visit(context.where);
         }
 
         List<OrderByElement> orderByElements = null;
@@ -2935,7 +2940,7 @@ public class AstBuilder extends StarRocksBaseVisitor<ParseNode> {
             limitElement = (LimitElement) visit(context.limitElement());
         }
 
-        return new ShowHistogramStatsMetaStmt(predicate, orderByElements, limitElement, createPos(context));
+        return new ShowHistogramStatsMetaStmt(where, orderByElements, limitElement, createPos(context));
     }
 
     private AnalyzeStmt histogramStatement(StarRocksParser.HistogramStatementContext context) {

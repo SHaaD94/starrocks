@@ -55,9 +55,8 @@ public class ShowDbStmt extends ShowStmt {
     }
 
     public ShowDbStmt(String pattern, Expr where, String catalogName, NodePosition pos) {
-        super(pos);
+        super(pos, where);
         this.pattern = pattern;
-        this.where = where;
         this.catalogName = catalogName;
     }
 

@@ -15,9 +15,9 @@
 package com.starrocks.sql.ast;
 
 import com.google.common.collect.Lists;
+import com.starrocks.analysis.Expr;
 import com.starrocks.analysis.LimitElement;
 import com.starrocks.analysis.OrderByElement;
-import com.starrocks.analysis.Predicate;
 import com.starrocks.analysis.RedirectStatus;
 import com.starrocks.analysis.TableName;
 import com.starrocks.authorization.AccessDeniedException;
@@ -39,10 +39,9 @@ import java.util.List;
 
 public class ShowHistogramStatsMetaStmt extends ShowStmt {
 
-    public ShowHistogramStatsMetaStmt(Predicate predicate, List<OrderByElement> orderByElements,
+    public ShowHistogramStatsMetaStmt(Expr where, List<OrderByElement> orderByElements,
                                       LimitElement limitElement, NodePosition pos) {
-        super(pos);
-        this.where = predicate;
+        super(pos, where);
         this.limitElement = limitElement;
         this.orderByElements = orderByElements;
     }

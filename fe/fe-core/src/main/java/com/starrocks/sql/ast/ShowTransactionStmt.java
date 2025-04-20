@@ -28,7 +28,6 @@ import com.starrocks.sql.parser.NodePosition;
 public class ShowTransactionStmt extends ShowStmt {
 
     private String dbName;
-    private Expr whereClause;
     private long txnId;
 
     public ShowTransactionStmt(String dbName, Expr whereClause) {
@@ -41,9 +40,6 @@ public class ShowTransactionStmt extends ShowStmt {
         this.whereClause = whereClause;
     }
 
-    public Expr getWhereClause() {
-        return whereClause;
-    }
 
     public String getDbName() {
         return dbName;

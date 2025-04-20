@@ -15,25 +15,27 @@
 
 package com.starrocks.sql.ast;
 
-import com.starrocks.analysis.*;
+import com.starrocks.analysis.Expr;
+import com.starrocks.analysis.LimitElement;
+import com.starrocks.analysis.OrderByElement;
+import com.starrocks.analysis.RedirectStatus;
 import com.starrocks.common.AnalysisException;
 import com.starrocks.common.util.OrderByPair;
 import com.starrocks.qe.ShowResultSetMetaData;
 import com.starrocks.sql.parser.NodePosition;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public abstract class ShowStmt extends StatementBase {
-    protected Expr where;
+    @Nullable
+    protected final Expr where;
     protected LimitElement limitElement;
     protected List<OrderByElement> orderByElements;
     protected List<OrderByPair> orderByPairs;
 
-    protected ShowStmt(NodePosition pos) {
+    protected ShowStmt(NodePosition pos, Expr where) {
         super(pos);
-    }
-
-    public void setWhere(Expr where) {
         this.where = where;
     }
 

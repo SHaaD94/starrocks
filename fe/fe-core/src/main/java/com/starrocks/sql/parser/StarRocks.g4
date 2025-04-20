@@ -391,7 +391,7 @@ dropDbStatement
     ;
 
 showCreateDbStatement
-    : SHOW CREATE (DATABASE | SCHEMA) identifier
+    : SHOW CREATE (DATABASE | SCHEMA) identifier (WHERE where=expression)?
     ;
 
 alterDatabaseRenameStatement
@@ -403,12 +403,12 @@ recoverDbStmt
     ;
 
 showDataStmt
-    : SHOW DATA
-    | SHOW DATA FROM qualifiedName
+    : SHOW DATA (WHERE where=expression)?
+    | SHOW DATA FROM qualifiedName (WHERE where=expression)?
     ;
 
 showDataDistributionStmt
-    : SHOW DATA DISTRIBUTION FROM qualifiedName partitionNames?
+    : SHOW DATA DISTRIBUTION FROM qualifiedName partitionNames? (WHERE where=expression)?
     ;
 
 // ------------------------------------------- Table Statement ---------------------------------------------------------
@@ -571,7 +571,7 @@ showTemporaryTablesStatement
     ;
 
 showCreateTableStatement
-    : SHOW CREATE (TABLE | VIEW | MATERIALIZED VIEW) table=qualifiedName
+    : SHOW CREATE (TABLE | VIEW | MATERIALIZED VIEW) table=qualifiedName (WHERE where=expression)?
     ;
 
 showColumnStatement
@@ -607,7 +607,7 @@ createTableLikeStatement
     ;
 
 showIndexStatement
-    : SHOW (INDEX | INDEXES | KEY | KEYS) ((FROM | IN) table=qualifiedName) ((FROM | IN) db=qualifiedName)?
+    : SHOW (INDEX | INDEXES | KEY | KEYS) ((FROM | IN) table=qualifiedName) ((FROM | IN) db=qualifiedName)? (WHERE where=expression)?
     ;
 
 recoverTableStatement
@@ -736,11 +736,11 @@ adminSetReplicaStatusStatement
     : ADMIN SET REPLICA STATUS properties
     ;
 adminShowConfigStatement
-    : ADMIN SHOW FRONTEND CONFIG (LIKE pattern=string)?
+    : ADMIN SHOW FRONTEND CONFIG ((LIKE pattern=string) | (WHERE expression))
     ;
 
 adminShowReplicaDistributionStatement
-    : ADMIN SHOW REPLICA DISTRIBUTION FROM qualifiedName partitionNames?
+    : ADMIN SHOW REPLICA DISTRIBUTION FROM qualifiedName partitionNames? (WHERE where=expression)?
     ;
 
 adminShowReplicaStatusStatement
@@ -790,7 +790,7 @@ cancelAlterSystemStatement
     ;
 
 showComputeNodesStatement
-    : SHOW COMPUTE NODES
+    : SHOW COMPUTE NODES (WHERE where=expression)?
     ;
 
 // ------------------------------------------- Catalog Statement -------------------------------------------------------
@@ -800,7 +800,7 @@ createExternalCatalogStatement
     ;
 
 showCreateExternalCatalogStatement
-    : SHOW CREATE CATALOG catalogName=identifierOrString
+    : SHOW CREATE CATALOG catalogName=identifierOrString (WHERE where=expression)?
     ;
 
 dropExternalCatalogStatement
@@ -808,7 +808,7 @@ dropExternalCatalogStatement
     ;
 
 showCatalogsStatement
-    : SHOW CATALOGS (LIKE pattern=string)?
+    : SHOW CATALOGS (LIKE pattern=string)? (WHERE where=expression)?
     ;
 
 alterCatalogStatement
@@ -831,7 +831,7 @@ locationsDesc
     ;
 
 showStorageVolumesStatement
-    : SHOW STORAGE VOLUMES (LIKE pattern=string)?
+    : SHOW STORAGE VOLUMES ((LIKE pattern=string) | (WHERE expression))
     ;
 
 dropStorageVolumeStatement
@@ -872,7 +872,7 @@ updateFailPointStatusStatement
     ;
 
 showFailPointStatement
-    : SHOW FAILPOINTS ((LIKE pattern=string))? (ON BACKEND string)?
+    : SHOW FAILPOINTS ((LIKE pattern=string))? (ON BACKEND string)? (WHERE where=expression)?
     ;
 
 // ------------------------------------------- Dictionary Statement -----------------------------------------------------
@@ -892,7 +892,7 @@ refreshDictionaryStatement
     ;
 
 showDictionaryStatement
-    : SHOW DICTIONARY qualifiedName?
+    : SHOW DICTIONARY qualifiedName? (WHERE where=expression)?
     ;
 
 cancelRefreshDictionaryStatement
@@ -1327,7 +1327,7 @@ showRoutineLoadTaskStatement
     ;
 
 showCreateRoutineLoadStatement
-    : SHOW CREATE ROUTINE LOAD (db=qualifiedName '.')? name=identifier
+    : SHOW CREATE ROUTINE LOAD (db=qualifiedName '.')? name=identifier (WHERE where=expression)?
     ;
 
 showStreamLoadStatement
@@ -1391,7 +1391,7 @@ showStatsMetaStatement
     ;
 
 showHistogramMetaStatement
-    : SHOW HISTOGRAM META (WHERE expression)? (ORDER BY sortItem (',' sortItem)*)? limitElement?
+    : SHOW HISTOGRAM META (WHERE expression)?(WHERE where=expression)? (ORDER BY sortItem (',' sortItem)*)? limitElement?
     ;
 
 killAnalyzeStatement
@@ -1416,7 +1416,7 @@ dropBaselinePlanStatement
     ;
 
 showBaselinePlanStatement
-    : SHOW BASELINE
+    : SHOW BASELINE (WHERE where=expression)?
     ;
 
 // ------------------------------------------- Work Group Statement ----------------------------------------------------
@@ -1576,15 +1576,15 @@ cancelCompactionStatement
 // ------------------------------------------- Show Statement ----------------------------------------------------------
 
 showAuthorStatement
-    : SHOW AUTHORS
+    : SHOW AUTHORS (WHERE where=expression)?
     ;
 
 showBackendsStatement
-    : SHOW BACKENDS
+    : SHOW BACKENDS (WHERE where=expression)?
     ;
 
 showBrokerStatement
-    : SHOW BROKER
+    : SHOW BROKER (WHERE where=expression)?
     ;
 
 showCharsetStatement
@@ -1596,11 +1596,11 @@ showCollationStatement
     ;
 
 showDeleteStatement
-    : SHOW DELETE ((FROM | IN) db=qualifiedName)?
+    : SHOW DELETE ((FROM | IN) db=qualifiedName)? (WHERE where=expression)?
     ;
 
 showDynamicPartitionStatement
-    : SHOW DYNAMIC PARTITION TABLES ((FROM | IN) db=qualifiedName)?
+    : SHOW DYNAMIC PARTITION TABLES ((FROM | IN) db=qualifiedName)? (WHERE where=expression)?
     ;
 
 showEventsStatement
@@ -1608,26 +1608,26 @@ showEventsStatement
     ;
 
 showEnginesStatement
-    : SHOW ENGINES
+    : SHOW ENGINES (WHERE where=expression)?
     ;
 
 showFrontendsStatement
-    : SHOW FRONTENDS
+    : SHOW FRONTENDS (WHERE where=expression)?
     ;
 
 showPluginsStatement
-    : SHOW PLUGINS
+    : SHOW PLUGINS (WHERE where=expression)?
     ;
 
 showRepositoriesStatement
-    : SHOW REPOSITORIES
+    : SHOW REPOSITORIES (WHERE where=expression)?
     ;
 
 showOpenTableStatement
-    : SHOW OPEN TABLES
+    : SHOW OPEN TABLES (WHERE where=expression)?
     ;
 showPrivilegesStatement
-    : SHOW PRIVILEGES
+    : SHOW PRIVILEGES (WHERE where=expression)?
     ;
 
 showProcedureStatement
@@ -1635,19 +1635,19 @@ showProcedureStatement
     ;
 
 showProcStatement
-    : SHOW PROC path=string
+    : SHOW PROC path=string (WHERE where=expression)?
     ;
 
 showProcesslistStatement
-    : SHOW FULL? PROCESSLIST (FOR string)?
+    : SHOW FULL? PROCESSLIST (FOR string)? (WHERE where=expression)?
     ;
 
 showProfilelistStatement
-    : SHOW PROFILELIST (LIMIT limit =INTEGER_VALUE)?
+    : SHOW PROFILELIST (WHERE where=expression)? (LIMIT limit =INTEGER_VALUE)?
     ;
 
 showRunningQueriesStatement
-    : SHOW RUNNING QUERIES (LIMIT limit =INTEGER_VALUE)?
+    : SHOW RUNNING QUERIES (WHERE where=expression)? (LIMIT limit =INTEGER_VALUE)?
     ;
 
 showStatusStatement
@@ -1655,7 +1655,7 @@ showStatusStatement
     ;
 
 showTabletStatement
-    : SHOW TABLET INTEGER_VALUE
+    : SHOW TABLET INTEGER_VALUE (WHERE where=expression)?
     | SHOW (TABLET | TABLETS) FROM qualifiedName partitionNames? (WHERE expression)? (ORDER BY sortItem (',' sortItem)*)? (limitElement)?
     ;
 
@@ -1668,8 +1668,8 @@ showTriggersStatement
     ;
 
 showUserPropertyStatement
-    : SHOW PROPERTY (FOR string)? (LIKE string)?
-    | SHOW PROPERTIES (FOR string)? (LIKE string)?
+    : SHOW PROPERTY (FOR string)? ((LIKE pattern=string) | (WHERE where=expression))?
+    | SHOW PROPERTIES (FOR string)? ((LIKE pattern=string) | (WHERE where=expression))?
     ;
 
 showVariablesStatement
@@ -1677,7 +1677,7 @@ showVariablesStatement
     ;
 
 showWarningStatement
-    : SHOW (WARNINGS | ERRORS) (limitElement)?
+    : SHOW (WARNINGS | ERRORS) (WHERE where=expression)? (limitElement)?
     ;
 
 helpStatement
@@ -1701,12 +1701,12 @@ alterUserStatement
     ;
 
 showUserStatement
-    : SHOW (USER | USERS)
+    : SHOW (USER | USERS) (WHERE where=expression)?
     ;
 
 showAuthenticationStatement
-    : SHOW ALL AUTHENTICATION                                                                           #showAllAuthentication
-    | SHOW AUTHENTICATION (FOR user)?                                                                   #showAuthenticationForUser
+    : SHOW ALL AUTHENTICATION (WHERE where=expression)?                                                 #showAllAuthentication
+    | SHOW AUTHENTICATION (FOR user)? (WHERE where=expression)?                                         #showAuthenticationForUser
     ;
 
 executeAsStatement
@@ -1726,7 +1726,7 @@ dropRoleStatement
     ;
 
 showRolesStatement
-    : SHOW ROLES
+    : SHOW ROLES (WHERE where=expression)?
     ;
 
 grantRoleStatement
@@ -1780,9 +1780,9 @@ revokePrivilegeStatement
     ;
 
 showGrantsStatement
-    : SHOW GRANTS
-    | SHOW GRANTS FOR USER? user
-    | SHOW GRANTS FOR ROLE identifierOrString
+    : SHOW GRANTS (WHERE where=expression)?
+    | SHOW GRANTS FOR USER? user (WHERE where=expression)?
+    | SHOW GRANTS FOR ROLE identifierOrString (WHERE where=expression)?
     ;
 
 authOption
@@ -1841,11 +1841,11 @@ dropSecurityIntegrationStatement
     ;
 
 showSecurityIntegrationStatement
-    : SHOW SECURITY INTEGRATIONS
+    : SHOW SECURITY INTEGRATIONS (WHERE where=expression)?
     ;
 
 showCreateSecurityIntegrationStatement
-    : SHOW CREATE SECURITY INTEGRATION identifier
+    : SHOW CREATE SECURITY INTEGRATION identifier (WHERE where=expression)?
     ;
 
 // ------------------------------------------- Group Provider Statement ------------------------------------------
@@ -1859,11 +1859,11 @@ dropGroupProviderStatement
     ;
 
 showGroupProvidersStatement
-    : SHOW GROUP PROVIDERS
+    : SHOW GROUP PROVIDERS (WHERE where=expression)?
     ;
 
 showCreateGroupProviderStatement
-    : SHOW CREATE GROUP PROVIDER identifier
+    : SHOW CREATE GROUP PROVIDER identifier (WHERE where=expression)?
     ;
 
 // ---------------------------------------- Backup Restore Statement ---------------------------------------------------
@@ -1880,7 +1880,7 @@ cancelBackupStatement
     ;
 
 showBackupStatement
-    : SHOW BACKUP ((FROM | IN) identifier)?
+    : SHOW BACKUP ((FROM | IN) identifier)? (WHERE where=expression)?
     ;
 
 restoreStatement
@@ -1927,11 +1927,11 @@ delSqlBlackListStatement
     ;
 
 showSqlBlackListStatement
-    : SHOW SQLBLACKLIST
+    : SHOW SQLBLACKLIST (WHERE where=expression)?
     ;
 
 showWhiteListStatement
-    : SHOW WHITELIST
+    : SHOW WHITELIST (WHERE where=expression)?
     ;
 
 // ------------------------------------ backend BlackList Statement ---------------------------------------------------
@@ -1945,7 +1945,7 @@ delBackendBlackListStatement
     ;
 
 showBackendBlackListStatement
-    : SHOW BACKEND BLACKLIST
+    : SHOW BACKEND BLACKLIST (WHERE where=expression)?
     ;
 
 // -------------------------------------- DataCache Management Statement --------------------------------------------
@@ -1959,7 +1959,7 @@ createDataCacheRuleStatement
     ;
 
 showDataCacheRulesStatement
-    : SHOW DATACACHE RULES
+    : SHOW DATACACHE RULES (WHERE where=expression)?
     ;
 
 dropDataCacheRuleStatement
@@ -2011,7 +2011,7 @@ dropFileStatement
     ;
 
 showSmallFilesStatement
-    : SHOW FILE ((FROM | IN) catalog=qualifiedName)?
+    : SHOW FILE ((FROM | IN) catalog=qualifiedName)? (WHERE where=expression)?
     ;
 
 // -------------------------------------------- Pipe Statement ---------------------------------------------------------
@@ -2133,7 +2133,7 @@ alterPlanAdvisorDropStatement
     : ALTER PLAN ADVISOR DROP string;
 
 showPlanAdvisorStatement
-    : SHOW PLAN ADVISOR;
+    : SHOW PLAN ADVISOR (WHERE where=expression)?;
 
 // ---------------------------------------- Warehouse Statement ---------------------------------------------------------
 
@@ -2159,16 +2159,16 @@ setWarehouseStatement
     ;
 
 showWarehousesStatement
-    : SHOW WAREHOUSES (LIKE pattern=string)?
+    : SHOW WAREHOUSES ((LIKE pattern=string) | (WHERE expression))?
     ;
 
 showClustersStatement
-    : SHOW (CLUSTERS | CNGROUPS) FROM WAREHOUSE identifier
+    : SHOW (CLUSTERS | CNGROUPS) FROM WAREHOUSE identifier (WHERE where=expression)?
     ;
 
 showNodesStatement
-    : SHOW NODES FROM WAREHOUSES (LIKE pattern=string)?
-    | SHOW NODES FROM WAREHOUSE identifier (CNGROUP cngroupName=identifierOrString)?
+    : SHOW NODES FROM WAREHOUSES ((LIKE pattern=string) | (WHERE expression))?
+    | SHOW NODES FROM WAREHOUSE identifier (CNGROUP cngroupName=identifierOrString)? (WHERE where=expression)?
     ;
 
 alterWarehouseStatement

@@ -69,10 +69,6 @@ public class ShowLoadWarningsStmt extends ShowStmt {
         this.dbName = dbName;
     }
 
-    public Expr getWhereClause() {
-        return whereClause;
-    }
-
     public LimitElement getLimitElement() {
         return limitElement;
     }

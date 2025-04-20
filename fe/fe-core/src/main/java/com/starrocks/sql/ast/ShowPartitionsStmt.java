@@ -127,10 +127,6 @@ public class ShowPartitionsStmt extends ShowStmt {
         return tableName;
     }
 
-    public Expr getWhereClause() {
-        return whereClause;
-    }
-
     public List<OrderByElement> getOrderByElements() {
         return orderByElements;
     }

@@ -15,6 +15,7 @@
 
 package com.starrocks.sql.ast;
 
+import com.starrocks.analysis.Expr;
 import com.starrocks.catalog.Column;
 import com.starrocks.catalog.ScalarType;
 import com.starrocks.qe.ShowResultSetMetaData;
@@ -34,11 +35,11 @@ public class ShowCreateDbStmt extends ShowStmt {
     private String db;
 
     public ShowCreateDbStmt(String db) {
-        this(db, NodePosition.ZERO);
+        this(db, NodePosition.ZERO, null);
     }
 
-    public ShowCreateDbStmt(String db, NodePosition pos) {
-        super(pos);
+    public ShowCreateDbStmt(String db, NodePosition pos, Expr where) {
+        super(pos, where);
         this.db = db;
     }
 
